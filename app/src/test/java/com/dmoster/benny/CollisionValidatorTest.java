@@ -9,7 +9,7 @@ public class CollisionValidatorTest {
 
   @Test
   public void zeroHealth_killsPlayer() {
-    
+
     PlayableCharacter player1 = new PlayableCharacter(1);
     player1.kill();
     assertFalse(player1.isAlive());
