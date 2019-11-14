@@ -13,6 +13,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -56,6 +58,42 @@ class GameView extends SurfaceView implements Runnable {
   // He starts 10 pixels from the left
   float bobXPosition = 10;
 
+
+  // New variables for the sprite sheet animation
+
+  // These next two values can be anything you like
+// As long as the ratio doesn't distort the sprite too much
+  private int frameWidth = 512;
+  private int frameHeight = 512;
+
+  // How many frames are there on the sprite sheet?
+  private int frameCount = 2;
+
+  // Start at the first frame - where else?
+  private int currentFrame = 0;
+
+  // What time was it when we last changed frames
+  private long lastFrameChangeTime = 0;
+
+  // How long should each frame last
+  private int frameLengthInMilliseconds = 200;
+
+  // A rectangle to define an area of the
+// sprite sheet that represents 1 frame
+  private Rect frameToDraw = new Rect(
+      0,
+      0,
+      frameWidth,
+      frameHeight);
+
+  // A rect that defines an area of the screen
+// on which to draw
+  RectF whereToDraw = new RectF(
+      bobXPosition,0,
+      bobXPosition + frameWidth,
+      frameHeight);
+
+
   // When the we initialize (call new()) on gameView
   // This special constructor method runs
   public GameView(Context context) {
@@ -69,15 +107,45 @@ class GameView extends SurfaceView implements Runnable {
     paint = new Paint();
 
     // Set scaling options for player character
-    BitmapFactory.Options options = new BitmapFactory.Options();
-    options.inDensity = 480;
+//    BitmapFactory.Options options = new BitmapFactory.Options();
+//    options.inDensity = 480;
 
     // Load Bob from his .png file
-    //bitmapBob = BitmapFactory.decodeResource(this.getResources(), R.drawable.bob);
-    bitmapBob = BitmapFactory.decodeResource(this.getResources(), R.drawable.bob, options);
+    bitmapBob = BitmapFactory.decodeResource(this.getResources(), R.drawable.benny_walk);
+//    bitmapBob = BitmapFactory.decodeResource(this.getResources(), R.drawable.benny_walk, options);
+
+
+    // Scale the bitmap to the correct size
+// We need to do this because Android automatically
+// scales bitmaps based on screen density
+    bitmapBob = Bitmap.createScaledBitmap(bitmapBob,
+        frameWidth * frameCount,
+        frameHeight,
+        false);
+
 
     // Set our boolean to true - game on!
     playing = true;
+
+  }
+
+  public void getCurrentFrame(){
+
+    long time  = System.currentTimeMillis();
+    if(isMoving) {// Only animate if bob is moving
+      if ( time > lastFrameChangeTime + frameLengthInMilliseconds) {
+        lastFrameChangeTime = time;
+        currentFrame ++;
+        if (currentFrame >= frameCount) {
+
+          currentFrame = 0;
+        }
+      }
+    }
+    //update the left and right values of the source of
+    //the next frame on the spritesheet
+    frameToDraw.left = currentFrame * frameWidth;
+    frameToDraw.right = frameToDraw.left + frameWidth;
 
   }
 
@@ -139,8 +207,21 @@ class GameView extends SurfaceView implements Runnable {
       // Display the current fps on the screen
       canvas.drawText("FPS:" + fps, 20, 40, paint);
 
-      // Draw bob at bobXPosition, 200 pixels
-      canvas.drawBitmap(bitmapBob, bobXPosition, 400, paint);
+//      // Draw a box
+//      canvas.drawRect(200, 580, 600, 650, paint);
+
+
+// New drawing code goes here
+      whereToDraw.set((int)bobXPosition,
+          400,
+          (int)bobXPosition + frameWidth,
+          400 + frameHeight);
+
+      getCurrentFrame();
+
+      canvas.drawBitmap(bitmapBob,
+          frameToDraw,
+          whereToDraw, paint);
 
       // Draw everything to the screen
       ourHolder.unlockCanvasAndPost(canvas);
