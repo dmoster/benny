@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
   // It will also hold the logic of the game
   // and respond to screen touches as well
   GameView gameView;
-
+//here is my comment
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
