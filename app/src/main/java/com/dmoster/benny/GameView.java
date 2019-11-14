@@ -140,7 +140,7 @@ class GameView extends SurfaceView implements Runnable {
       canvas.drawText("FPS:" + fps, 20, 40, paint);
 
       // Draw bob at bobXPosition, 200 pixels
-      canvas.drawBitmap(bitmapBob, bobXPosition, 200, paint);
+      canvas.drawBitmap(bitmapBob, bobXPosition, 400, paint);
 
       // Draw everything to the screen
       ourHolder.unlockCanvasAndPost(canvas);
