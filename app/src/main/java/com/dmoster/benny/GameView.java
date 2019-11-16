@@ -8,7 +8,6 @@ package com.dmoster.benny;
 // is inside SimpleGameEngine
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -21,7 +20,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
 // Notice we implement runnable so we have
 // A thread and can override the run method.

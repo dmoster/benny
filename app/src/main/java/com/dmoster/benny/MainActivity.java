@@ -38,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
     gameView = new GameView(this);
     setContentView(gameView);
 
-    // Go to start/pause menu
-    showMenu();
+//    // Go to start/pause menu
+//    showMenu();
   }
 
   @Override
