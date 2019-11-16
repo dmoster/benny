@@ -7,15 +7,12 @@ package com.dmoster.benny;
 // Note how the final closing curly brace }
 // is inside SimpleGameEngine
 
+import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.RectF;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -49,6 +46,8 @@ class GameView extends SurfaceView implements Runnable {
 
   //Get display info
   private HeadsUpDisplay hud;
+
+  protected DisplayMetrics displayMetrics;
   protected int height;
   protected int width;
 
@@ -72,6 +71,12 @@ class GameView extends SurfaceView implements Runnable {
     // Initialize ourHolder and paint objects
     ourHolder = getHolder();
     paint = new Paint();
+
+    // Initialize display info
+    displayMetrics = new DisplayMetrics();
+    ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+    height = displayMetrics.heightPixels;
+    width = displayMetrics.widthPixels;
 
     //Initilize HUD
     hud = new HeadsUpDisplay(3, 0, 0, 12.47);
