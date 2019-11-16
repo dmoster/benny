@@ -9,7 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PauseMenu"></activity>
+        <activity
+            android:name=".PauseMenu"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.AppCompat.Dialog">
+
+        </activity>
         <activity
             android:name=".MainActivity"
             android:screenOrientation="landscape">

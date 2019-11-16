@@ -7,6 +7,7 @@ package com.dmoster.benny;
 // Note how the final closing curly brace }
 // is inside SimpleGameEngine
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,10 +17,12 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.WindowManager;
 
 // Notice we implement runnable so we have
 // A thread and can override the run method.
@@ -47,6 +50,14 @@ class GameView extends SurfaceView implements Runnable {
   // This is used to help calculate the fps
   private long timeThisFrame;
 
+  // Create a Heads-Up Display
+  private HeadsUpDisplay hud;
+
+  // Get display info
+  protected DisplayMetrics displayMetrics;
+  protected int height;
+  protected int width;
+
   // Declare an object of type Bitmap
   Bitmap bitmapBob;
   Bitmap bitmapBobMirrored;
@@ -58,7 +69,7 @@ class GameView extends SurfaceView implements Runnable {
   boolean isFacingRight;
 
   // He can walk at 150 pixels per second
-  float walkSpeedPerSecond = 150;
+  float walkSpeedPerSecond = 200;
 
   // He starts 10 pixels from the left
   float bobXPosition = 10;
@@ -80,7 +91,7 @@ class GameView extends SurfaceView implements Runnable {
   private long lastFrameChangeTime = 0;
 
   // How long should each frame last
-  private int frameLengthInMilliseconds = 200;
+  private int frameLengthInMilliseconds = 150;
 
   // A rectangle to define an area of the
 // sprite sheet that represents 1 frame
@@ -110,19 +121,14 @@ class GameView extends SurfaceView implements Runnable {
     ourHolder = getHolder();
     paint = new Paint();
 
-    // Set scaling options for player character
-//    BitmapFactory.Options options = new BitmapFactory.Options();
-//    options.inDensity = 480;
-
     // Load Bob from his .png file
     bitmapBob = BitmapFactory.decodeResource(this.getResources(), R.drawable.benny_walk);
-//    bitmapBob = BitmapFactory.decodeResource(this.getResources(), R.drawable.benny_walk, options);
     //Load Bob from his .png file. This will be flipped soon.
     bitmapBobMirrored = BitmapFactory.decodeResource(this.getResources(), R.drawable.benny_walk);
 
     // Scale the bitmap to the correct size
-// We need to do this because Android automatically
-// scales bitmaps based on screen density
+    // We need to do this because Android automatically
+    // scales bitmaps based on screen density
     bitmapBob = Bitmap.createScaledBitmap(bitmapBob,
         frameWidth * frameCount,
         frameHeight,
@@ -137,6 +143,15 @@ class GameView extends SurfaceView implements Runnable {
     Matrix m = new Matrix();
     m.preScale(-1.0f, 1.0f);
     bitmapBobMirrored = Bitmap.createBitmap(bitmapBobMirrored, 0, 0, bitmapBobMirrored.getWidth(), bitmapBobMirrored.getHeight(), m, true);
+
+    // Initialize display info
+    displayMetrics = new DisplayMetrics();
+    ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+    height = displayMetrics.heightPixels;
+    width = displayMetrics.widthPixels;
+
+    // Initialize HUD
+    hud = new HeadsUpDisplay(3, 0, 0, 12.47);
 
     // Set our boolean to true - game on!
     playing = true;
@@ -215,17 +230,12 @@ class GameView extends SurfaceView implements Runnable {
       // Draw the background color
       canvas.drawColor(Color.argb(255, 26, 128, 182));
 
-      // Choose the brush color for drawing
-      paint.setColor(Color.argb(255, 249, 129, 0));
+      // Display the HUD on the screen
+      hud.draw(paint, canvas, width);
 
-      // Make the text a bit bigger
-      paint.setTextSize(45);
-
-      // Display the current fps on the screen
-      canvas.drawText("FPS:" + fps, 20, 40, paint);
-
-//      // Draw a box
-//      canvas.drawRect(200, 580, 600, 650, paint);
+      // Draw pause button
+      canvas.drawRect(width - 65, 20, width - 45, 80, paint);
+      canvas.drawRect(width - 25, 20, width - 5, 80, paint);
 
 
       if(isFacingRight) {
@@ -269,8 +279,6 @@ class GameView extends SurfaceView implements Runnable {
     try {
       gameThread.join();
 
-
-
     } catch (InterruptedException e) {
       Log.e("Error:", "joining thread");
     }
@@ -289,21 +297,30 @@ class GameView extends SurfaceView implements Runnable {
   // So we can override this method and detect screen touches.
   @Override
   public boolean onTouchEvent(MotionEvent motionEvent) {
+    float touchXPosition = motionEvent.getX();
+    float touchYPosition = motionEvent.getY();
+
 
     switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
 
       // Player has touched the screen
       case MotionEvent.ACTION_DOWN:
+        // Pause if touch is in right location
+        if (touchXPosition > width - 70 && touchXPosition < width &&
+            touchYPosition > 20 && touchYPosition < 80) {
+          ((MainActivity) getContext()).showMenu();
+        }
+        else {
+          // Set isMoving so Bob is moved in the update method
+          isMoving = true;
+          if (touchXPosition < bobXPosition)
+            isFacingRight = false;
+          else
+            isFacingRight = true;
 
-        // Set isMoving so Bob is moved in the update method
-        isMoving = true;
-        float touchXPosition = motionEvent.getX();
-        if(touchXPosition < bobXPosition)
-          isFacingRight = false;
-        else
-          isFacingRight = true;
+          System.out.println(isFacingRight);
+        }
 
-        System.out.println(isFacingRight);
         break;
 
       // Player has removed finger from screen
@@ -318,4 +335,4 @@ class GameView extends SurfaceView implements Runnable {
   }
 
 }
-// This is the end of our GameView inner class
+// This is the end of our GameView class
