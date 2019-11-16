@@ -27,7 +27,7 @@ public abstract class Entity {
     {
         setXPosition(xPos);
         setYPosition(yPos);
-        whereToDraw = new RectF(getXPosition(), 0, getXPosition() + bitmapFrameWidth, bitmapFrameHeight);
+        whereToDraw = new RectF(getXPosition(), 400, getXPosition() + bitmapFrameWidth, bitmapFrameHeight + 400);
         frameToDraw = new Rect(0,0,bitmapFrameWidth, bitmapFrameHeight);
         this.movementSpeed = movementSpeed;
     }

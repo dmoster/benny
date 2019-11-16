@@ -34,9 +34,14 @@ public class HeadsUpDisplay {
     // Make the text a bit bigger
     paint.setTextSize(60);
 
+    // Draw counters
     canvas.drawText("Lives: " + lives, 70, 70, paint);
     canvas.drawText("Shirts: " + tshirts, 70 + width - (4 * width / 5), 70, paint);
     canvas.drawText("Lollies: " + lollies, 70 + width - (3 * width / 5), 70, paint);
     canvas.drawText("Money: $" + money, 70 + width - (2 * width / 5), 70, paint);
+
+    // Draw pause button
+    canvas.drawRect(width - 65, 20, width - 45, 80, paint);
+    canvas.drawRect(width - 25, 20, width - 5, 80, paint);
   }
 }

@@ -153,12 +153,6 @@ class GameView extends SurfaceView implements Runnable {
       // Choose the brush color for drawing
       paint.setColor(Color.argb(255, 249, 129, 0));
 
-      // Make the text a bit bigger
-      paint.setTextSize(45);
-
-      // Display the current fps on the screen
-      canvas.drawText("FPS:" + fps, 20, 40, paint);
-
       //Draw the hud on the screen
       hud.draw(paint, canvas, width);
 

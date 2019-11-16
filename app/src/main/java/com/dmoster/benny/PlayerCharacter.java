@@ -34,6 +34,7 @@ public class PlayerCharacter extends Entity implements IDrawable {
     public PlayerCharacter(Context c)
     {
         super(10, 0, 300);
+        isFacingRight = true;
         AddHashMapValues();
         standBitmap = bitFunc.LoadBitmap(this, c, R.drawable.benny_stand, frameCount.get("Stand"));
         standBitmapMirrored = bitFunc.FlipBitmap(standBitmap);
