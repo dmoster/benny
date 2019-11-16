@@ -18,6 +18,8 @@ package com.dmoster.benny;
 //}
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     setContentView(gameView);
 
     // Go to start/pause menu
-    onPause();
+    showMenu();
   }
 
   @Override
@@ -75,6 +77,13 @@ public class MainActivity extends AppCompatActivity {
     gameView.resume();
   }
 
+  public void showMenu() {
+
+    // Create new Intent which calls PauseMenu
+    Intent pause = new Intent(this, PauseMenu.class);
+    startActivity(pause);
+  }
+
   // This method executes when the player quits the game
   @Override
   protected void onPause() {
@@ -82,6 +91,9 @@ public class MainActivity extends AppCompatActivity {
 
     // Tell the gameView pause method to execute
     gameView.pause();
+
+    // Show pause menu
+    showMenu();
   }
 
 }
