@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -48,16 +49,19 @@ class GameView extends SurfaceView implements Runnable {
 
   // Declare an object of type Bitmap
   Bitmap bitmapBob;
+  Bitmap bitmapBobMirrored;
 
   // Bob starts off not moving
   boolean isMoving = false;
+
+  //Bob starts off facing right
+  boolean isFacingRight;
 
   // He can walk at 150 pixels per second
   float walkSpeedPerSecond = 150;
 
   // He starts 10 pixels from the left
   float bobXPosition = 10;
-
 
   // New variables for the sprite sheet animation
 
@@ -113,7 +117,8 @@ class GameView extends SurfaceView implements Runnable {
     // Load Bob from his .png file
     bitmapBob = BitmapFactory.decodeResource(this.getResources(), R.drawable.benny_walk);
 //    bitmapBob = BitmapFactory.decodeResource(this.getResources(), R.drawable.benny_walk, options);
-
+    //Load Bob from his .png file. This will be flipped soon.
+    bitmapBobMirrored = BitmapFactory.decodeResource(this.getResources(), R.drawable.benny_walk);
 
     // Scale the bitmap to the correct size
 // We need to do this because Android automatically
@@ -123,6 +128,15 @@ class GameView extends SurfaceView implements Runnable {
         frameHeight,
         false);
 
+    // Same as above, but with the other bitmap
+    bitmapBobMirrored = Bitmap.createScaledBitmap(bitmapBobMirrored,
+            frameWidth * frameCount,
+            frameHeight,
+            false);
+
+    Matrix m = new Matrix();
+    m.preScale(-1.0f, 1.0f);
+    bitmapBobMirrored = Bitmap.createBitmap(bitmapBobMirrored, 0, 0, bitmapBobMirrored.getWidth(), bitmapBobMirrored.getHeight(), m, true);
 
     // Set our boolean to true - game on!
     playing = true;
@@ -181,8 +195,11 @@ class GameView extends SurfaceView implements Runnable {
 
     // If bob is moving (the player is touching the screen)
     // then move him to the right based on his target speed and the current fps.
-    if(isMoving){
+    if(isMoving && isFacingRight){
       bobXPosition = bobXPosition + (walkSpeedPerSecond / fps);
+    }
+    else if(isMoving && !isFacingRight) {
+      bobXPosition = bobXPosition - (walkSpeedPerSecond / fps);
     }
 
   }
@@ -211,17 +228,32 @@ class GameView extends SurfaceView implements Runnable {
 //      canvas.drawRect(200, 580, 600, 650, paint);
 
 
+      if(isFacingRight) {
+        whereToDraw.set((int) bobXPosition,
+                400,
+                (int) bobXPosition + frameWidth,
+                400 + frameHeight);
+
+        getCurrentFrame();
+
+        canvas.drawBitmap(bitmapBob,
+                frameToDraw,
+                whereToDraw, paint);
+      } else if (!isFacingRight) {
+        whereToDraw.set((int) bobXPosition,
+                400,
+                (int) bobXPosition + frameWidth,
+                400 + frameHeight);
+
+        getCurrentFrame();
+
+        canvas.drawBitmap(bitmapBobMirrored,
+                frameToDraw,
+                whereToDraw, paint);
+
+      }
 // New drawing code goes here
-      whereToDraw.set((int)bobXPosition,
-          400,
-          (int)bobXPosition + frameWidth,
-          400 + frameHeight);
 
-      getCurrentFrame();
-
-      canvas.drawBitmap(bitmapBob,
-          frameToDraw,
-          whereToDraw, paint);
 
       // Draw everything to the screen
       ourHolder.unlockCanvasAndPost(canvas);
@@ -261,7 +293,13 @@ class GameView extends SurfaceView implements Runnable {
 
         // Set isMoving so Bob is moved in the update method
         isMoving = true;
+        float touchXPosition = motionEvent.getX();
+        if(touchXPosition < bobXPosition)
+          isFacingRight = false;
+        else
+          isFacingRight = true;
 
+        System.out.println(isFacingRight);
         break;
 
       // Player has removed finger from screen
