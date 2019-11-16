@@ -12,8 +12,8 @@ public abstract class Entity {
     public boolean isMoving;
     public boolean isFacingRight;
 
-    float XPosition;
-    float YPosition;
+    private float XPosition;
+    private float YPosition;
 
     RectF whereToDraw;
     Rect frameToDraw;

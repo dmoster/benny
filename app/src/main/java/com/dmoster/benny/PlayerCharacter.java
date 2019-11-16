@@ -3,6 +3,8 @@ package com.dmoster.benny;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.util.Log;
+
 import com.dmoster.benny.BitmapFunctions;
 
 import java.util.HashMap;
@@ -12,28 +14,41 @@ public class PlayerCharacter extends Entity implements IDrawable {
 
     BitmapFunctions bitFunc = new BitmapFunctions();
 
-    Bitmap standBitmap;
-    Bitmap standBitmapMirrored;
-    Bitmap walkBitmap;
-    Bitmap walkBitmapMirrored;
-    Bitmap bulldozeBitmap;
-    Bitmap bulldozeBitmapMirrored;
+    private Bitmap standBitmap;
+    private Bitmap standBitmapMirrored;
+    private Bitmap walkBitmap;
+    private Bitmap walkBitmapMirrored;
+    private Bitmap bulldozeBitmap;
+    private Bitmap bulldozeBitmapMirrored;
 
     Map<String, Integer> frameCount = new HashMap<String,Integer>();
 
-    public PlayerCharacter(Context c)
-    {
-        super(10, 400, 300);
+    public PlayerCharacter() {
+        super(100, 0, 300);
         frameCount.put("Stand", 5);
         frameCount.put("Walk", 2);
         frameCount.put("Bulldoze", 2);
+        Log.e("PLAYER CHARACTER CLASS:", "CALLED DEFAULT CONSTRUCTOR, NO BITMAPS CREATED!");
+    }
 
+    public PlayerCharacter(Context c)
+    {
+        super(10, 0, 300);
+        AddHashMapValues();
         standBitmap = bitFunc.LoadBitmap(this, c, R.drawable.benny_stand, frameCount.get("Stand"));
         standBitmapMirrored = bitFunc.FlipBitmap(standBitmap);
         walkBitmap = bitFunc.LoadBitmap(this, c, R.drawable.benny_walk, frameCount.get("Walk"));
-        walkBitmapMirrored = bitFunc.FlipBitmap(standBitmap);
+        walkBitmapMirrored = bitFunc.FlipBitmap(walkBitmap);
         bulldozeBitmap = bitFunc.LoadBitmap(this, c, R.drawable.benny_bulldoze, frameCount.get("Bulldoze"));
-        bulldozeBitmapMirrored = bitFunc.FlipBitmap(standBitmap);
+        bulldozeBitmapMirrored = bitFunc.FlipBitmap(bulldozeBitmap);
+    }
+
+
+    public void AddHashMapValues()
+    {
+        frameCount.put("Stand", 5);
+        frameCount.put("Walk", 2);
+        frameCount.put("Bulldoze", 2);
     }
 
 
