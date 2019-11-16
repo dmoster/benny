@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     setContentView(gameView);
 
     // Go to start/pause menu
-    onPause();
+
   }
 
   @Override
