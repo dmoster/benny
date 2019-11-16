@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">benny</string>
+    <string name="title_activity_pause_menu">PauseMenu</string>
+    <string name="go_btn">Start</string>
 </resources>

@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
   // gameView will be the view of the game
   // It will also hold the logic of the game
   // and respond to screen touches as well
-  GameView gameView;
+  static GameView gameView;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     gameView = new GameView(this);
     setContentView(gameView);
 
+    // Go to start/pause menu
+    onPause();
   }
 
   @Override

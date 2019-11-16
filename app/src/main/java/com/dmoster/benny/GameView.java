@@ -267,6 +267,10 @@ class GameView extends SurfaceView implements Runnable {
     playing = false;
     try {
       gameThread.join();
+
+      // Create new Intent which calls PauseMenu
+
+
     } catch (InterruptedException e) {
       Log.e("Error:", "joining thread");
     }
