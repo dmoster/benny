@@ -47,56 +47,19 @@ class GameView extends SurfaceView implements Runnable {
   // This is used to help calculate the fps
   private long timeThisFrame;
 
+  //Get display info
+  private HeadsUpDisplay hud;
+  protected int height;
+  protected int width;
+
+  //Create Player character object
   PlayerCharacter player = new PlayerCharacter(this.getContext());
-  // Declare an object of type Bitmap
-
-  // Bob starts off not moving
-  //boolean isMoving = false;
-
-  //Bob starts off facing right
-  //boolean isFacingRight;
-
-  // He can walk at 150 pixels per second
-  //float walkSpeedPerSecond = 150;
-
-  // He starts 10 pixels from the left
-  //float bobXPosition = 10;
-
-  // New variables for the sprite sheet animation
-
-  // These next two values can be anything you like
-// As long as the ratio doesn't distort the sprite too much
-  //private int frameWidth = 512;
-  //private int frameHeight = 512;
-
-  // How many frames are there on the sprite sheet?
-  //private int frameCount = 2;
-
-  // Start at the first frame - where else?
-  //private int currentFrame = 0;
 
   // What time was it when we last changed frames
   private long lastFrameChangeTime = 0;
 
   // How long should each frame last
-  private int frameLengthInMilliseconds = 200;
-
-  /*
-  // A rectangle to define an area of the
-// sprite sheet that represents 1 frame
-  private Rect frameToDraw = new Rect(
-      0,
-      0,
-      frameWidth,
-      frameHeight);
-
-  // A rect that defines an area of the screen
-// on which to draw
-  RectF whereToDraw = new RectF(
-      bobXPosition,0,
-      bobXPosition + frameWidth,
-      frameHeight);
-*/
+  private int frameLengthInMilliseconds = 150;
 
   // When the we initialize (call new()) on gameView
   // This special constructor method runs
@@ -110,9 +73,8 @@ class GameView extends SurfaceView implements Runnable {
     ourHolder = getHolder();
     paint = new Paint();
 
-    // Set scaling options for player character
-//    BitmapFactory.Options options = new BitmapFactory.Options();
-//    options.inDensity = 480;
+    //Initilize HUD
+    hud = new HeadsUpDisplay(3, 0, 0, 12.47);
 
     // Set our boolean to true - game on!
     playing = true;
@@ -120,9 +82,8 @@ class GameView extends SurfaceView implements Runnable {
   }
 
   public void getCurrentFrame(Entity e){
-
+    //Get delta time, and find the frame we need to show.
     long time  = System.currentTimeMillis();
-    if(e.isMoving) {// Only animate if bob is moving
       if ( time > lastFrameChangeTime + frameLengthInMilliseconds) {
         lastFrameChangeTime = time;
         e.currentFrame ++;
@@ -130,7 +91,6 @@ class GameView extends SurfaceView implements Runnable {
 
           e.currentFrame = 0;
         }
-      }
     }
     //update the left and right values of the source of
     //the next frame on the spritesheet
@@ -169,8 +129,7 @@ class GameView extends SurfaceView implements Runnable {
   // We will also do other things like collision detection.
   public void update() {
 
-    // If bob is moving (the player is touching the screen)
-    // then move him to the right based on his target speed and the current fps.
+    //Update players movement
     player.updatePosition(fps);
 
   }
@@ -195,8 +154,8 @@ class GameView extends SurfaceView implements Runnable {
       // Display the current fps on the screen
       canvas.drawText("FPS:" + fps, 20, 40, paint);
 
-//      // Draw a box
-//      canvas.drawRect(200, 580, 600, 650, paint);
+      //Draw the hud on the screen
+      hud.draw(paint, canvas, width);
 
       player.drawToCanvas(this, canvas);
 // New drawing code goes here
@@ -236,21 +195,28 @@ class GameView extends SurfaceView implements Runnable {
   // So we can override this method and detect screen touches.
   @Override
   public boolean onTouchEvent(MotionEvent motionEvent) {
+    //Get location of touch
+    float touchXPosition = motionEvent.getX();
+    float touchYPosition = motionEvent.getY();
 
     switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
 
       // Player has touched the screen
       case MotionEvent.ACTION_DOWN:
-
-        // Set isMoving so Bob is moved in the update method
+        //Player touched right location
+        if (touchXPosition > width - 70 && touchXPosition < width &&
+                touchYPosition > 20 && touchYPosition < 80) {
+          //Show the menu
+          ((MainActivity) getContext()).showMenu();
+        } else {
+        // Make Player move in direction touched
         player.isMoving = true;
-        float touchXPosition = motionEvent.getX();
         if(touchXPosition < player.getXPosition())
           player.isFacingRight = false;
         else
           player.isFacingRight = true;
+        }
 
-        System.out.println(player.isFacingRight);
         break;
 
       // Player has removed finger from screen
