@@ -7,7 +7,6 @@ package com.dmoster.benny;
 // Note how the final closing curly brace }
 // is inside SimpleGameEngine
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,12 +16,10 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.WindowManager;
 
 // Notice we implement runnable so we have
 // A thread and can override the run method.
@@ -50,49 +47,41 @@ class GameView extends SurfaceView implements Runnable {
   // This is used to help calculate the fps
   private long timeThisFrame;
 
-  // Create a Heads-Up Display
-  private HeadsUpDisplay hud;
-
-  // Get display info
-  protected DisplayMetrics displayMetrics;
-  protected int height;
-  protected int width;
-
+  PlayerCharacter player = new PlayerCharacter(this.getContext());
   // Declare an object of type Bitmap
-  Bitmap bitmapBob;
-  Bitmap bitmapBobMirrored;
 
   // Bob starts off not moving
-  boolean isMoving = false;
+  //boolean isMoving = false;
 
   //Bob starts off facing right
-  boolean isFacingRight;
+  //boolean isFacingRight;
 
   // He can walk at 150 pixels per second
-  float walkSpeedPerSecond = 200;
+  //float walkSpeedPerSecond = 150;
 
   // He starts 10 pixels from the left
-  float bobXPosition = 10;
+  //float bobXPosition = 10;
 
   // New variables for the sprite sheet animation
 
   // These next two values can be anything you like
 // As long as the ratio doesn't distort the sprite too much
-  private int frameWidth = 512;
-  private int frameHeight = 512;
+  //private int frameWidth = 512;
+  //private int frameHeight = 512;
 
   // How many frames are there on the sprite sheet?
-  private int frameCount = 2;
+  //private int frameCount = 2;
 
   // Start at the first frame - where else?
-  private int currentFrame = 0;
+  //private int currentFrame = 0;
 
   // What time was it when we last changed frames
   private long lastFrameChangeTime = 0;
 
   // How long should each frame last
-  private int frameLengthInMilliseconds = 150;
+  private int frameLengthInMilliseconds = 200;
 
+  /*
   // A rectangle to define an area of the
 // sprite sheet that represents 1 frame
   private Rect frameToDraw = new Rect(
@@ -107,7 +96,7 @@ class GameView extends SurfaceView implements Runnable {
       bobXPosition,0,
       bobXPosition + frameWidth,
       frameHeight);
-
+*/
 
   // When the we initialize (call new()) on gameView
   // This special constructor method runs
@@ -121,60 +110,32 @@ class GameView extends SurfaceView implements Runnable {
     ourHolder = getHolder();
     paint = new Paint();
 
-    // Load Bob from his .png file
-    bitmapBob = BitmapFactory.decodeResource(this.getResources(), R.drawable.benny_walk);
-    //Load Bob from his .png file. This will be flipped soon.
-    bitmapBobMirrored = BitmapFactory.decodeResource(this.getResources(), R.drawable.benny_walk);
-
-    // Scale the bitmap to the correct size
-    // We need to do this because Android automatically
-    // scales bitmaps based on screen density
-    bitmapBob = Bitmap.createScaledBitmap(bitmapBob,
-        frameWidth * frameCount,
-        frameHeight,
-        false);
-
-    // Same as above, but with the other bitmap
-    bitmapBobMirrored = Bitmap.createScaledBitmap(bitmapBobMirrored,
-            frameWidth * frameCount,
-            frameHeight,
-            false);
-
-    Matrix m = new Matrix();
-    m.preScale(-1.0f, 1.0f);
-    bitmapBobMirrored = Bitmap.createBitmap(bitmapBobMirrored, 0, 0, bitmapBobMirrored.getWidth(), bitmapBobMirrored.getHeight(), m, true);
-
-    // Initialize display info
-    displayMetrics = new DisplayMetrics();
-    ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-    height = displayMetrics.heightPixels;
-    width = displayMetrics.widthPixels;
-
-    // Initialize HUD
-    hud = new HeadsUpDisplay(3, 0, 0, 12.47);
+    // Set scaling options for player character
+//    BitmapFactory.Options options = new BitmapFactory.Options();
+//    options.inDensity = 480;
 
     // Set our boolean to true - game on!
     playing = true;
 
   }
 
-  public void getCurrentFrame(){
+  public void getCurrentFrame(Entity e){
 
     long time  = System.currentTimeMillis();
-    if(isMoving) {// Only animate if bob is moving
+    if(e.isMoving) {// Only animate if bob is moving
       if ( time > lastFrameChangeTime + frameLengthInMilliseconds) {
         lastFrameChangeTime = time;
-        currentFrame ++;
-        if (currentFrame >= frameCount) {
+        e.currentFrame ++;
+        if (e.currentFrame >= e.currentAnimationFrameCount) {
 
-          currentFrame = 0;
+          e.currentFrame = 0;
         }
       }
     }
     //update the left and right values of the source of
     //the next frame on the spritesheet
-    frameToDraw.left = currentFrame * frameWidth;
-    frameToDraw.right = frameToDraw.left + frameWidth;
+    e.frameToDraw.left = e.currentFrame * e.bitmapFrameWidth;
+    e.frameToDraw.right = e.frameToDraw.left + e.bitmapFrameWidth;
 
   }
 
@@ -210,12 +171,7 @@ class GameView extends SurfaceView implements Runnable {
 
     // If bob is moving (the player is touching the screen)
     // then move him to the right based on his target speed and the current fps.
-    if(isMoving && isFacingRight){
-      bobXPosition = bobXPosition + (walkSpeedPerSecond / fps);
-    }
-    else if(isMoving && !isFacingRight) {
-      bobXPosition = bobXPosition - (walkSpeedPerSecond / fps);
-    }
+    player.updatePosition(fps);
 
   }
 
@@ -230,38 +186,19 @@ class GameView extends SurfaceView implements Runnable {
       // Draw the background color
       canvas.drawColor(Color.argb(255, 26, 128, 182));
 
-      // Display the HUD on the screen
-      hud.draw(paint, canvas, width);
+      // Choose the brush color for drawing
+      paint.setColor(Color.argb(255, 249, 129, 0));
 
-      // Draw pause button
-      canvas.drawRect(width - 65, 20, width - 45, 80, paint);
-      canvas.drawRect(width - 25, 20, width - 5, 80, paint);
+      // Make the text a bit bigger
+      paint.setTextSize(45);
 
+      // Display the current fps on the screen
+      canvas.drawText("FPS:" + fps, 20, 40, paint);
 
-      if(isFacingRight) {
-        whereToDraw.set((int) bobXPosition,
-                400,
-                (int) bobXPosition + frameWidth,
-                400 + frameHeight);
+//      // Draw a box
+//      canvas.drawRect(200, 580, 600, 650, paint);
 
-        getCurrentFrame();
-
-        canvas.drawBitmap(bitmapBob,
-                frameToDraw,
-                whereToDraw, paint);
-      } else if (!isFacingRight) {
-        whereToDraw.set((int) bobXPosition,
-                400,
-                (int) bobXPosition + frameWidth,
-                400 + frameHeight);
-
-        getCurrentFrame();
-
-        canvas.drawBitmap(bitmapBobMirrored,
-                frameToDraw,
-                whereToDraw, paint);
-
-      }
+      player.drawToCanvas(this, canvas);
 // New drawing code goes here
 
 
@@ -278,6 +215,8 @@ class GameView extends SurfaceView implements Runnable {
 
     try {
       gameThread.join();
+
+
 
     } catch (InterruptedException e) {
       Log.e("Error:", "joining thread");
@@ -297,37 +236,28 @@ class GameView extends SurfaceView implements Runnable {
   // So we can override this method and detect screen touches.
   @Override
   public boolean onTouchEvent(MotionEvent motionEvent) {
-    float touchXPosition = motionEvent.getX();
-    float touchYPosition = motionEvent.getY();
-
 
     switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
 
       // Player has touched the screen
       case MotionEvent.ACTION_DOWN:
-        // Pause if touch is in right location
-        if (touchXPosition > width - 70 && touchXPosition < width &&
-            touchYPosition > 20 && touchYPosition < 80) {
-          ((MainActivity) getContext()).showMenu();
-        }
-        else {
-          // Set isMoving so Bob is moved in the update method
-          isMoving = true;
-          if (touchXPosition < bobXPosition)
-            isFacingRight = false;
-          else
-            isFacingRight = true;
 
-          System.out.println(isFacingRight);
-        }
+        // Set isMoving so Bob is moved in the update method
+        player.isMoving = true;
+        float touchXPosition = motionEvent.getX();
+        if(touchXPosition < player.getXPosition())
+          player.isFacingRight = false;
+        else
+          player.isFacingRight = true;
 
+        System.out.println(player.isFacingRight);
         break;
 
       // Player has removed finger from screen
       case MotionEvent.ACTION_UP:
 
         // Set isMoving so Bob does not move
-        isMoving = false;
+        player.isMoving = false;
 
         break;
     }
@@ -335,4 +265,4 @@ class GameView extends SurfaceView implements Runnable {
   }
 
 }
-// This is the end of our GameView class
+// This is the end of our GameView inner class
