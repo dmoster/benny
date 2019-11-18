@@ -1,5 +1,6 @@
 package com.dmoster.benny;
 
+import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
@@ -46,6 +47,10 @@ public abstract class Entity {
 
     public void setYPosition(float YPosition) {
         this.YPosition = YPosition;
+    }
+
+    public void drawToCanvas(GameView g, Canvas c) {
+        return;
     }
 
     void updatePosition(long fps)

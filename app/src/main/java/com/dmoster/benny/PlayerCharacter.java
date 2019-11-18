@@ -10,7 +10,7 @@ import com.dmoster.benny.BitmapFunctions;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlayerCharacter extends Entity implements IDrawable {
+public class PlayerCharacter extends Entity {
 
     BitmapFunctions bitFunc = new BitmapFunctions();
 
@@ -52,7 +52,7 @@ public class PlayerCharacter extends Entity implements IDrawable {
         frameCount.put("Bulldoze", 2);
     }
 
-
+    @Override
     public void drawToCanvas(GameView g, Canvas c) {
         if (isFacingRight && isMoving) {
             currentAnimationFrameCount = frameCount.get("Walk");
