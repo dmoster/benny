@@ -33,7 +33,7 @@ public class PlayerCharacter extends Entity {
 
     public PlayerCharacter(Context c)
     {
-        super(10, 0, 300, "Bob");
+        super(10, 0, 300, "Benny");
         isFacingRight = true;
         AddHashMapValues();
         Log.i("PLAYER CHARACTER", "HashMapValues Loaded");

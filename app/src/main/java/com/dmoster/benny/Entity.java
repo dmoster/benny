@@ -11,8 +11,8 @@ public abstract class Entity {
 
     String name = "Unnamed Entity";
 
-    int bitmapFrameHeight = 512;
-    int bitmapFrameWidth = 512;
+    int bitmapFrameHeight = 256;
+    int bitmapFrameWidth = 256;
 
     public boolean isMoving;
     public boolean isFacingRight;
@@ -67,15 +67,16 @@ public abstract class Entity {
         else if(isMoving && !isFacingRight) {
             setXPosition(getXPosition() - (movementSpeed / fps));
         }
-        float[] currentPosition = {getXPosition(), getYPosition()};
-        if(currentPosition[0] != prevPosition[0])
-        {
-            Log.i("ENTITY", "Entity; " + this.name + "\'s X Position has changed");
-        }
-        if(currentPosition[1] != prevPosition[1])
-        {
-            Log.i("ENTITY", "Entity; " + this.name + "\'s Y Position has changed");
-        }
+
+//        float[] currentPosition = {getXPosition(), getYPosition()};
+//        if(currentPosition[0] != prevPosition[0])
+//        {
+//            Log.i("ENTITY", "Entity; " + this.name + "\'s X Position has changed");
+//        }
+//        if(currentPosition[1] != prevPosition[1])
+//        {
+//            Log.i("ENTITY", "Entity; " + this.name + "\'s Y Position has changed");
+//        }
     }
 
 }

@@ -135,7 +135,7 @@ class GameView extends SurfaceView implements Runnable {
   public void update() {
 
     //Update players movement
-    Log.i("GameView", "Updating Player Position...");
+    //Log.i("GameView", "Updating Player Position...");
     player.updatePosition(fps);
 
   }
@@ -222,7 +222,7 @@ class GameView extends SurfaceView implements Runnable {
       // Player has removed finger from screen
       case MotionEvent.ACTION_UP:
 
-        // Set isMoving so Bob does not move
+        // Set isMoving so character does not move
         player.isMoving = false;
 
         break;

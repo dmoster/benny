@@ -43,5 +43,9 @@ public class HeadsUpDisplay {
     // Draw pause button
     canvas.drawRect(width - 65, 20, width - 45, 80, paint);
     canvas.drawRect(width - 25, 20, width - 5, 80, paint);
+
+
+    canvas.drawRect(100, 656, 228, 784, paint);
+    canvas.drawRect(228, 656, 356, 784, paint);
   }
 }
