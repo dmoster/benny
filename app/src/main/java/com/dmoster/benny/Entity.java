@@ -5,7 +5,11 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 public abstract class Entity {
+
+    String name = "Unnamed Entity";
 
     int bitmapFrameHeight = 512;
     int bitmapFrameWidth = 512;
@@ -24,8 +28,9 @@ public abstract class Entity {
 
     float movementSpeed;
 
-    public Entity(int xPos, int yPos, int movementSpeed)
+    public Entity(int xPos, int yPos, int movementSpeed, String name)
     {
+        this.name = name;
         setXPosition(xPos);
         setYPosition(yPos);
         whereToDraw = new RectF(getXPosition(), 400, getXPosition() + bitmapFrameWidth, bitmapFrameHeight + 400);
@@ -55,11 +60,21 @@ public abstract class Entity {
 
     void updatePosition(long fps)
     {
+        float[] prevPosition = {getXPosition(), getYPosition()};
         if(isMoving && isFacingRight){
             setXPosition(getXPosition() + (movementSpeed / fps));
         }
         else if(isMoving && !isFacingRight) {
             setXPosition(getXPosition() - (movementSpeed / fps));
+        }
+        float[] currentPosition = {getXPosition(), getYPosition()};
+        if(currentPosition[0] != prevPosition[0])
+        {
+            Log.i("ENTITY", "Entity; " + this.name + "\'s X Position has changed");
+        }
+        if(currentPosition[1] != prevPosition[1])
+        {
+            Log.i("ENTITY", "Entity; " + this.name + "\'s Y Position has changed");
         }
     }
 

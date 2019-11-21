@@ -24,7 +24,7 @@ public class PlayerCharacter extends Entity {
     Map<String, Integer> frameCount = new HashMap<String,Integer>();
 
     public PlayerCharacter() {
-        super(100, 0, 300);
+        super(100, 0, 300, "Default Player");
         frameCount.put("Stand", 5);
         frameCount.put("Walk", 2);
         frameCount.put("Bulldoze", 2);
@@ -33,15 +33,17 @@ public class PlayerCharacter extends Entity {
 
     public PlayerCharacter(Context c)
     {
-        super(10, 0, 300);
+        super(10, 0, 300, "Bob");
         isFacingRight = true;
         AddHashMapValues();
+        Log.i("PLAYER CHARACTER", "HashMapValues Loaded");
         standBitmap = bitFunc.LoadBitmap(this, c, R.drawable.benny_stand, frameCount.get("Stand"));
         standBitmapMirrored = bitFunc.FlipBitmap(standBitmap);
         walkBitmap = bitFunc.LoadBitmap(this, c, R.drawable.benny_walk, frameCount.get("Walk"));
         walkBitmapMirrored = bitFunc.FlipBitmap(walkBitmap);
         bulldozeBitmap = bitFunc.LoadBitmap(this, c, R.drawable.benny_bulldoze, frameCount.get("Bulldoze"));
         bulldozeBitmapMirrored = bitFunc.FlipBitmap(bulldozeBitmap);
+        Log.i("PLAYER CHARACTER", "Hashmaps and Mirrored Hashmaps created");
     }
 
 
