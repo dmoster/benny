@@ -12,6 +12,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -148,6 +150,20 @@ class GameView extends SurfaceView implements Runnable {
   }
 
   private void handleCollisions() {
+    //Iterate through each entity, and see if they hit something else.
+    for(int i = 0; i < entities.size() - 1; i++)
+    {
+      for(int a = i + 1; a < entities.size(); a++)
+      {
+        //Very helpful function! If this is true, we got a hit!
+        if(RectF.intersects(entities.get(i).whereToDraw, entities.get(a).whereToDraw))
+        {
+          //Lets have each entity deal with collisions on their own.
+          entities.get(i).collide(entities.get(a));
+          entities.get(a).collide(entities.get(i));
+        }
+      }
+    }
   }
 
   private void applyPhysics() {

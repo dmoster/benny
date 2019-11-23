@@ -102,4 +102,10 @@ public abstract class Entity {
 
     }
 
+    void collide(Entity hitTarget)
+    {
+
+    }
+
+
 }
