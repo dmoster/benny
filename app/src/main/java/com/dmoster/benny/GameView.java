@@ -18,6 +18,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.ArrayList;
+
 // Notice we implement runnable so we have
 // A thread and can override the run method.
 class GameView extends SurfaceView implements Runnable {
@@ -51,6 +53,9 @@ class GameView extends SurfaceView implements Runnable {
   protected int height;
   protected int width;
 
+  private float gravity = 0.25f;
+
+  ArrayList<Entity> entities = new ArrayList<Entity>();
   //Create Player character object
   PlayerCharacter player = new PlayerCharacter(this.getContext());
 
@@ -80,7 +85,7 @@ class GameView extends SurfaceView implements Runnable {
 
     //Initilize HUD
     hud = new HeadsUpDisplay(3, 0, 0, 12.47);
-
+    entities.add(player);
     // Set our boolean to true - game on!
     playing = true;
 
@@ -136,8 +141,23 @@ class GameView extends SurfaceView implements Runnable {
 
     //Update players movement
     //Log.i("GameView", "Updating Player Position...");
+    applyPhysics();
     player.updatePosition(fps);
 
+  }
+
+  private void applyPhysics() {
+    for(Entity e : entities)
+    {
+        e.addYVelocity(gravity);
+
+      //We set this to 400 cause its our current ground... we should be checking for the height we collide with the ground.
+      if(e.getYPosition() > 400) {
+        e.setYPosition(400);
+        e.setYVelocity(0);
+      }
+
+    }
   }
 
   // Draw the newly updated scene
@@ -208,6 +228,10 @@ class GameView extends SurfaceView implements Runnable {
                 touchYPosition > 20 && touchYPosition < 80) {
           //Show the menu
           ((MainActivity) getContext()).showMenu();
+        } else if (touchXPosition > width - 300 && touchXPosition < width &&
+                touchYPosition > 700 && touchYPosition < 1000){
+          Log.i("GAMEVIEW", "Jump button pressed");
+          player.jump(lastFrameChangeTime);
         } else {
         // Make Player move in direction touched
         player.isMoving = true;
@@ -224,7 +248,6 @@ class GameView extends SurfaceView implements Runnable {
 
         // Set isMoving so character does not move
         player.isMoving = false;
-
         break;
     }
     return true;

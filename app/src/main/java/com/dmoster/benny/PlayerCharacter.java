@@ -24,7 +24,7 @@ public class PlayerCharacter extends Entity {
     Map<String, Integer> frameCount = new HashMap<String,Integer>();
 
     public PlayerCharacter() {
-        super(100, 0, 300, "Default Player");
+        super(100, 400, 300, "Default Player");
         frameCount.put("Stand", 5);
         frameCount.put("Walk", 2);
         frameCount.put("Bulldoze", 2);
@@ -33,7 +33,7 @@ public class PlayerCharacter extends Entity {
 
     public PlayerCharacter(Context c)
     {
-        super(10, 0, 300, "Benny");
+        super(10, 400, 300, "Bob");
         isFacingRight = true;
         AddHashMapValues();
         Log.i("PLAYER CHARACTER", "HashMapValues Loaded");
@@ -56,12 +56,13 @@ public class PlayerCharacter extends Entity {
 
     @Override
     public void drawToCanvas(GameView g, Canvas c) {
+        whereToDraw.set((int) getXPosition(),
+                getYPosition(),
+                (int) getXPosition() + bitmapFrameWidth,
+                getYPosition() + bitmapFrameHeight);
+
         if (isFacingRight && isMoving) {
             currentAnimationFrameCount = frameCount.get("Walk");
-            whereToDraw.set((int) getXPosition(),
-                    400,
-                    (int) getXPosition() + bitmapFrameWidth,
-                    400 + bitmapFrameHeight);
 
             g.getCurrentFrame(this);
 
@@ -70,10 +71,6 @@ public class PlayerCharacter extends Entity {
                     whereToDraw, g.paint);
         } else if (!isFacingRight && isMoving) {
             currentAnimationFrameCount = frameCount.get("Walk");
-            whereToDraw.set((int) getXPosition(),
-                    400,
-                    (int) getXPosition() + bitmapFrameWidth,
-                    400 + bitmapFrameHeight);
 
             g.getCurrentFrame(this);
 

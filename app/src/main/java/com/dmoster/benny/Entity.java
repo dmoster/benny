@@ -5,8 +5,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 public abstract class Entity {
 
     String name = "Unnamed Entity";
@@ -14,11 +12,15 @@ public abstract class Entity {
     int bitmapFrameHeight = 256;
     int bitmapFrameWidth = 256;
 
+    public float fallingMultiplier = 2.5f;
+
     public boolean isMoving;
     public boolean isFacingRight;
 
     private float XPosition;
     private float YPosition;
+
+    private float YVelocity;
 
     RectF whereToDraw;
     Rect frameToDraw;
@@ -27,13 +29,16 @@ public abstract class Entity {
     int currentAnimationFrameCount = 0;
 
     float movementSpeed;
+    float jumpHeight = 10;
+
+    int groundDetectionOffset = 15;
 
     public Entity(int xPos, int yPos, int movementSpeed, String name)
     {
         this.name = name;
         setXPosition(xPos);
         setYPosition(yPos);
-        whereToDraw = new RectF(getXPosition(), 400, getXPosition() + bitmapFrameWidth, bitmapFrameHeight + 400);
+        whereToDraw = new RectF(getXPosition(), getYPosition(), getXPosition() + bitmapFrameWidth, bitmapFrameHeight + getYPosition());
         frameToDraw = new Rect(0,0,bitmapFrameWidth, bitmapFrameHeight);
         this.movementSpeed = movementSpeed;
     }
@@ -54,29 +59,47 @@ public abstract class Entity {
         this.YPosition = YPosition;
     }
 
+    public float getYVelocity() {
+        return YVelocity;
+    }
+
+    public void setYVelocity(float YVelocity) {
+        this.YVelocity = YVelocity;
+    }
+
+    public void addYVelocity(float add) {
+        this.YVelocity += add;
+    }
+
     public void drawToCanvas(GameView g, Canvas c) {
         return;
     }
 
     void updatePosition(long fps)
     {
-        float[] prevPosition = {getXPosition(), getYPosition()};
         if(isMoving && isFacingRight){
             setXPosition(getXPosition() + (movementSpeed / fps));
         }
         else if(isMoving && !isFacingRight) {
             setXPosition(getXPosition() - (movementSpeed / fps));
         }
+        if(getYVelocity() != 0)
+        {
+            Log.i("ENTITY", "Y Velocity Before change" + getYVelocity());
+            Log.i("ENTITY", "Changing Y Position" + getYPosition());
+            setYPosition(getYPosition() + getYVelocity());
+        }
 
-//        float[] currentPosition = {getXPosition(), getYPosition()};
-//        if(currentPosition[0] != prevPosition[0])
-//        {
-//            Log.i("ENTITY", "Entity; " + this.name + "\'s X Position has changed");
-//        }
-//        if(currentPosition[1] != prevPosition[1])
-//        {
-//            Log.i("ENTITY", "Entity; " + this.name + "\'s Y Position has changed");
-//        }
+    }
+
+    void jump(float deltaTime)
+    {
+        if(getYPosition() < 400 + groundDetectionOffset && getYPosition() > 400 - groundDetectionOffset)
+        {
+            Log.i("ENTITY", "Applying jump velocity");
+            addYVelocity(-jumpHeight);
+        }
+
     }
 
 }

@@ -47,5 +47,8 @@ public class HeadsUpDisplay {
 
     canvas.drawRect(100, 656, 228, 784, paint);
     canvas.drawRect(228, 656, 356, 784, paint);
+
+    //Temp jump button
+    canvas.drawRect(width - 300, 1000, width - 5, 700, paint);
   }
 }
