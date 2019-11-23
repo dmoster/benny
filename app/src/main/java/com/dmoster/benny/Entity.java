@@ -102,9 +102,9 @@ public abstract class Entity {
 
     }
 
-    void collide(Entity hitTarget)
+    public void collide(Entity hitTarget)
     {
-
+        //Add logic!
     }
 
 

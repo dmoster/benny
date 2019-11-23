@@ -98,4 +98,9 @@ public class PlayerCharacter extends Entity {
                     whereToDraw, g.paint);
         }
     }
+
+    @Override
+    public void collide(Entity hitTarget) {
+
+    }
 }
