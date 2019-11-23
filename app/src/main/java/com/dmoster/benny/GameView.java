@@ -143,7 +143,11 @@ class GameView extends SurfaceView implements Runnable {
     //Log.i("GameView", "Updating Player Position...");
     applyPhysics();
     player.updatePosition(fps);
+    handleCollisions();
 
+  }
+
+  private void handleCollisions() {
   }
 
   private void applyPhysics() {
