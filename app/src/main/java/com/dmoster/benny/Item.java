@@ -20,7 +20,7 @@ public class Item extends Entity {
 
     itemBitmap = bitFunc.LoadBitmap(this, context, bitmapId, frameCount);
 
-    Log.i(TAG, "Hashmaps and Mirrored Hashmaps created");
+    Log.i(TAG, name + " loaded");
   }
 
   @Override

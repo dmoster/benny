@@ -13,7 +13,7 @@ public abstract class Entity {
     int bitmapFrameHeight = 128;
     int bitmapFrameWidth = 128;
 
-    public float fallingMultiplier = 3.0f;
+    public float fallingMultiplier = 2.5f;
 
     public boolean isMoving;
     public boolean isFacingRight;
@@ -86,8 +86,8 @@ public abstract class Entity {
         }
         if(getYVelocity() != 0)
         {
-            Log.i(TAG, "Y Velocity Before change" + getYVelocity());
-            Log.i(TAG, "Changing Y Position" + getYPosition());
+//            Log.i(TAG, "Y Velocity Before change" + getYVelocity());
+//            Log.i(TAG, "Changing Y Position" + getYPosition());
             setYPosition(getYPosition() + getYVelocity());
         }
 
@@ -97,7 +97,7 @@ public abstract class Entity {
     {
         if(getYPosition() < 400 + groundDetectionOffset && getYPosition() > 400 - groundDetectionOffset)
         {
-            Log.i(TAG, "Applying jump velocity");
+//            Log.i(TAG, "Applying jump velocity");
             addYVelocity(-jumpHeight);
         }
 
