@@ -21,10 +21,13 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 // Notice we implement runnable so we have
 // A thread and can override the run method.
 class GameView extends SurfaceView implements Runnable {
+
+  private static final String TAG = "GameView";
 
   // This is our thread
   Thread gameThread = null;
@@ -48,6 +51,23 @@ class GameView extends SurfaceView implements Runnable {
   // This is used to help calculate the fps
   private long timeThisFrame;
 
+  // Camera and map
+  private TileMap map;
+
+  private int[][][] tileMapData = {
+    {
+      {7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7},
+      {7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,2,2,2},
+      {7,7,7,7,7,7,7,7,7,7,7,7,7,2,2,7,7,7},
+      {7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7},
+      {2,2,2,2,2,7,7,7,2,2,2,2,2,2,2,2,2,2},
+      {7,7,7,7,7,7,7,7,7,2,2,2,2,7,7,7,7,7},
+      {7,7,7,7,7,7,7,7,7,7,2,2,2,7,7,7,7,7},
+      {7,7,7,7,7,2,2,7,7,7,7,7,7,7,7,7,7,7},
+      {7,7,7,7,7,7,7,7,7,2,2,2,2,2,7,7,7,7}
+    }
+  };
+
   //Get display info
   private HeadsUpDisplay hud;
 
@@ -58,7 +78,8 @@ class GameView extends SurfaceView implements Runnable {
   private float gravity = 0.25f;
 
   ArrayList<Entity> entities = new ArrayList<Entity>();
-  //Create Player character object
+
+  // Create Player character object
   PlayerCharacter player = new PlayerCharacter(this.getContext());
 
   // What time was it when we last changed frames
@@ -85,27 +106,57 @@ class GameView extends SurfaceView implements Runnable {
     height = displayMetrics.heightPixels;
     width = displayMetrics.widthPixels;
 
-    //Initilize HUD
+    // Initialize map
+    map = new TileMap(tileMapData[0]);
+
+    // Initialize HUD
     hud = new HeadsUpDisplay(3, 0, 0, 12.47);
+
+    // Add entities to list
     entities.add(player);
+
+    Random random = new Random();
+    for (int i = 0; i < 6; ++i) {
+      switch (random.nextInt(5)) {
+        case 0:
+          entities.add(new Item(this.getContext(), width / 6, height / 6, 0, R.drawable.purple_lolly, "Purple Lolly"));
+          break;
+        case 1:
+          entities.add(new Item(this.getContext(), width / 2, height / 2, 0, R.drawable.pink_lolly, "Pink Lolly"));
+          break;
+
+        case 2:
+          entities.add(new Item(this.getContext(), width / 3, height / 3, 0, R.drawable.blue_lolly, "Blue Lolly"));
+          break;
+        case 3:
+          entities.add(new Item(this.getContext(), width / 4, height / 4, 0, R.drawable.green_lolly, "Green Lolly"));
+          break;
+        case 4:
+          entities.add(new Item(this.getContext(), width / 5, height / 5, 0, R.drawable.orange_lolly, "Orange Lolly"));
+          break;
+      }
+    }
+
     // Set our boolean to true - game on!
     playing = true;
-
   }
 
   public void getCurrentFrame(Entity e){
     //Get delta time, and find the frame we need to show.
     long time  = System.currentTimeMillis();
-      if ( time > lastFrameChangeTime + frameLengthInMilliseconds) {
-        lastFrameChangeTime = time;
-        e.currentFrame ++;
-        if (e.currentFrame >= e.currentAnimationFrameCount) {
 
-          e.currentFrame = 0;
-        }
+    if ( time > lastFrameChangeTime + frameLengthInMilliseconds) {
+
+      lastFrameChangeTime = time;
+      e.currentFrame ++;
+
+      if (e.currentFrame >= e.currentAnimationFrameCount) {
+
+        e.currentFrame = 0;
+      }
     }
     //update the left and right values of the source of
-    //the next frame on the spritesheet
+    //the next frame on the sprite sheet
     e.frameToDraw.left = e.currentFrame * e.bitmapFrameWidth;
     e.frameToDraw.right = e.frameToDraw.left + e.bitmapFrameWidth;
 
@@ -188,17 +239,19 @@ class GameView extends SurfaceView implements Runnable {
       // Lock the canvas ready to draw
       canvas = ourHolder.lockCanvas();
 
-      // Draw the background color
-      canvas.drawColor(Color.argb(255, 26, 128, 182));
+      // New drawing code goes here
+      map.draw(canvas, width, height);
 
       // Choose the brush color for drawing
       paint.setColor(Color.argb(255, 249, 129, 0));
 
+
+      for (Entity entity: entities) {
+        entity.drawToCanvas(this, canvas);
+      }
+
       //Draw the hud on the screen
       hud.draw(paint, canvas, width);
-
-      player.drawToCanvas(this, canvas);
-// New drawing code goes here
 
 
       // Draw everything to the screen

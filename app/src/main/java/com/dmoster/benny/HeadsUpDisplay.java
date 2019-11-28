@@ -29,7 +29,7 @@ public class HeadsUpDisplay {
 
   public void draw(Paint paint, Canvas canvas, final int width) {
     // Choose the brush color for drawing
-    paint.setColor(Color.argb(255, 249, 129, 0));
+    paint.setColor(Color.argb(180, 106, 90, 205));
 
     // Make the text a bit bigger
     paint.setTextSize(60);
@@ -43,10 +43,6 @@ public class HeadsUpDisplay {
     // Draw pause button
     canvas.drawRect(width - 65, 20, width - 45, 80, paint);
     canvas.drawRect(width - 25, 20, width - 5, 80, paint);
-
-
-    canvas.drawRect(100, 656, 228, 784, paint);
-    canvas.drawRect(228, 656, 356, 784, paint);
 
     //Temp jump button
     canvas.drawRect(width - 300, 1000, width - 5, 700, paint);
