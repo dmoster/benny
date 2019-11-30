@@ -52,7 +52,7 @@ class GameView extends SurfaceView implements Runnable {
   private long timeThisFrame;
 
   // Camera and map
-  private TileMap map;
+  public TileMap map;
 
   private int[][][] tileMapData = {
     {
@@ -68,19 +68,19 @@ class GameView extends SurfaceView implements Runnable {
     },
     {
       {7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7},
-      {7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,2,2,2},
-      {7,7,7,7,7,7,7,7,7,7,7,7,7,2,2,7,7,7},
+      {2,7,7,2,2,7,7,7,7,7,7,7,7,7,7,2,2,2},
       {7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7},
-      {2,2,2,2,2,7,7,7,2,2,2,2,2,2,2,2,2,2},
-      {7,7,7,7,7,7,7,7,7,2,2,2,2,7,7,7,7,7},
+      {7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7},
+      {7,7,7,2,2,7,7,7,2,2,2,7,7,7,7,7,7,7},
+      {2,2,7,7,7,7,7,7,7,7,7,7,2,7,7,7,7,7},
       {7,7,7,7,7,7,7,7,7,7,2,2,2,7,7,7,7,7},
-      {7,7,7,7,7,2,2,7,7,7,7,7,7,7,7,7,7,7},
+      {7,7,7,7,7,2,2,7,7,7,7,7,7,7,7,2,2,2},
       {7,7,7,7,7,7,7,7,7,2,2,2,2,2,7,7,7,7}
     }
   };
 
   //Get display info
-  private HeadsUpDisplay hud;
+  public HeadsUpDisplay hud;
 
   protected DisplayMetrics displayMetrics;
   protected int height;
@@ -211,10 +211,9 @@ class GameView extends SurfaceView implements Runnable {
 
   private void handleDead() {
     //Write this later!
-    for (Entity e: entities)
-    {
-      if(!e.alive)
-      {
+    for (int i = 0; i < entities.size(); i++) {
+      if (!entities.get(i).alive) {
+        entities.remove(i);
       }
     }
   }
@@ -268,7 +267,7 @@ class GameView extends SurfaceView implements Runnable {
       canvas = ourHolder.lockCanvas();
 
       // New drawing code goes here
-      map.draw(canvas);
+      map.draw(canvas, player, width, height);
 
       // Choose the brush color for drawing
       paint.setColor(Color.argb(255, 249, 129, 0));

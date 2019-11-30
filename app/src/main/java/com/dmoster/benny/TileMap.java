@@ -15,7 +15,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -45,6 +47,12 @@ public class TileMap {
       new Tile(0, 255, 255, false)
   };
 
+  public void setCurrentMap(int mapIndex) {
+    mapCounter = mapIndex;
+    currentMap = tileMapData[mapCounter];
+    collisionData = new HashSet<>();
+  }
+
   /**
    * Constructor that loads current map data into the map
    * @param tileMapData Array containing tile type keys for each index on the map
@@ -61,7 +69,9 @@ public class TileMap {
    *
    * @param canvas Main canvas of the GameView where the tiles are drawn
    */
-  public void draw(Canvas canvas) {
+  public void draw(Canvas canvas, PlayerCharacter player, int width, int height) {
+    wrapMap(player, width, height);
+
     int tileLocX;
     int tileLocY = 64;
 
@@ -78,9 +88,26 @@ public class TileMap {
   }
 
 
-  // Map wrapping
-  // 1. If user gets to end of screen, send him to other end
-  // 2.
+  private void wrapMap(PlayerCharacter player, int width, int height) {
+    if (player.getXPosition() > width && mapCounter < tileMapData.length - 1) {
+      setCurrentMap(++mapCounter);
+      player.setXPosition(0);
+    }
+    else if (player.getXPosition() > width && mapCounter == tileMapData.length - 1) {
+      player.setXPosition(width);
+    }
+    else if (player.getXPosition() < 0 && mapCounter > 0) {
+      setCurrentMap(--mapCounter);
+      player.setXPosition(width);
+    }
+    else if (player.getXPosition() < 0 && mapCounter == 0) {
+      player.setXPosition(0);
+    }
+
+    if (player.getYPosition() > height) {
+      player.kill();
+    }
+  }
 
 
   private class Tile {

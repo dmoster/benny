@@ -28,20 +28,21 @@ public class HeadsUpDisplay {
     return singleton;
   }
 
-  public int getLives() { return lives; }
-  public int getTshirts() { return tshirts; }
-  public int getLollies() { return lollies; }
-  public double getMoney() { return money; }
+  private String toMoneyStr(double money) {
+    return String.format("%.2f", money);
+  }
 
-  public void setLives(int lives) { this.lives = lives; }
-  public void setTshirts(int tshirts) { this.tshirts = tshirts; }
-  public void setLollies(int lollies) { this.lollies = lollies; }
-  public void setMoney(double money) { this.money = money; }
+  public int getLives() { return lives; }
 
   public void addLives(int lives) { this.lives += lives; }
   public void addTshirts(int tshirts) { this.tshirts += tshirts; }
   public void addLollies(int lollies) { this.lollies += lollies; }
   public void addMoney(double money) { this.money += money; }
+
+  public void subtractLives(int lives) { this.lives -= lives; }
+  public void subtractTshirts(int tshirts) { this.tshirts -= tshirts; }
+  public void subtractLollies(int lollies) { this.lollies -= lollies; }
+  public void subtractMoney(double money) { this.money -= money; }
 
   public void draw(Paint paint, Canvas canvas, final int width) {
     // Choose the brush color for drawing
@@ -54,7 +55,7 @@ public class HeadsUpDisplay {
     canvas.drawText("Lives: " + lives, 70, 70, paint);
     canvas.drawText("Shirts: " + tshirts, 70 + width - (4 * width / 5), 70, paint);
     canvas.drawText("Lollies: " + lollies, 70 + width - (3 * width / 5), 70, paint);
-    canvas.drawText("Money: $" + money, 70 + width - (2 * width / 5), 70, paint);
+    canvas.drawText("Money: $" + toMoneyStr(money), 70 + width - (2 * width / 5), 70, paint);
 
     // Draw pause button
     canvas.drawRect(width - 65, 20, width - 45, 80, paint);

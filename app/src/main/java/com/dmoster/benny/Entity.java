@@ -17,150 +17,150 @@ import android.graphics.RectF;
 import android.util.Log;
 
 public abstract class Entity {
-    private static final String TAG = "ENTITY";
+  private static final String TAG = "ENTITY";
 
-    String name = "Unnamed Entity";
+  String name = "Unnamed Entity";
 
-    int bitmapFrameHeight = 128;
-    int bitmapFrameWidth = 128;
+  int bitmapFrameHeight = 128;
+  int bitmapFrameWidth = 128;
 
-    public boolean isMoving;
-    public boolean isFacingRight;
-    public boolean grounded = true;
-    public boolean alive;
+  public boolean isMoving;
+  public boolean isFacingRight;
+  public boolean grounded = true;
+  public boolean alive;
 
-    private float XPosition;
-    private float YPosition;
+  private float XPosition;
+  private float YPosition;
 
-    private float YVelocity;
+  private float YVelocity;
 
-    RectF whereToDraw;
-    Rect frameToDraw;
+  RectF whereToDraw;
+  Rect frameToDraw;
 
-    int currentFrame = 0;
-    int currentAnimationFrameCount = 0;
+  int currentFrame = 0;
+  int currentAnimationFrameCount = 0;
 
-    float movementSpeed;
-    float jumpHeight = 15;
+  float movementSpeed;
+  float jumpHeight = 15;
 
-    /**
-     * Constructor that creates a new entity, this should never be called on its own.
-     * @param xPos the starting x position of the entity stored in an int
-     * @param yPos the starting y position of the entity stored in an int
-     * @param movementSpeed the speed that which a unit will move across the screen. 0 means the unit is stationary.
-     * @param name the name of the entity, just so its easier to find and log info.
-     */
+  /**
+   * Constructor that creates a new entity, this should never be called on its own.
+   * @param xPos the starting x position of the entity stored in an int
+   * @param yPos the starting y position of the entity stored in an int
+   * @param movementSpeed the speed that which a unit will move across the screen. 0 means the unit is stationary.
+   * @param name the name of the entity, just so its easier to find and log info.
+   */
 
-    public Entity(int xPos, int yPos, int movementSpeed, String name)
+  public Entity(int xPos, int yPos, int movementSpeed, String name)
+  {
+    this.name = name;
+    setXPosition(xPos);
+    setYPosition(yPos);
+    setYVelocity(0);
+    whereToDraw = new RectF(getXPosition(), getYPosition(), getXPosition() + bitmapFrameWidth, bitmapFrameHeight + getYPosition());
+    frameToDraw = new Rect(0,0,bitmapFrameWidth, bitmapFrameHeight);
+    this.movementSpeed = movementSpeed;
+    alive = true;
+  }
+
+  public float getXPosition() {
+    return XPosition;
+  }
+
+  public float getYPosition() {
+    return YPosition;
+  }
+
+  public void setXPosition(float XPosition) {
+    this.XPosition = XPosition;
+  }
+
+  public void setYPosition(float YPosition) {
+    this.YPosition = YPosition;
+  }
+
+  public float getYVelocity() {
+    return YVelocity;
+  }
+
+  public void setYVelocity(float YVelocity) {
+    this.YVelocity = YVelocity;
+  }
+
+  public void addYVelocity(float add) {
+    this.YVelocity += add;
+  }
+
+  public void drawToCanvas(GameView g, Canvas c) {
+    return;
+  }
+
+  /**
+   * updatePosition Method for entity
+   *
+   * @param fps The current fps is passed in to ensure nothing wonky happens at extremely low or high fps.
+   */
+
+  void updatePosition(long fps)
+  {
+    if(isMoving && isFacingRight){
+      setXPosition(getXPosition() + (movementSpeed / fps));
+    }
+    else if(isMoving && !isFacingRight) {
+      setXPosition(getXPosition() - (movementSpeed / fps));
+    }
+    if(getYVelocity() != 0)
     {
-        this.name = name;
-        setXPosition(xPos);
-        setYPosition(yPos);
-        setYVelocity(0);
-        whereToDraw = new RectF(getXPosition(), getYPosition(), getXPosition() + bitmapFrameWidth, bitmapFrameHeight + getYPosition());
-        frameToDraw = new Rect(0,0,bitmapFrameWidth, bitmapFrameHeight);
-        this.movementSpeed = movementSpeed;
-        alive = true;
+      setYPosition(getYPosition() + getYVelocity());
     }
+    if(YPosition > 5000)
+      alive = false;
 
-    public float getXPosition() {
-        return XPosition;
-    }
+  }
 
-    public float getYPosition() {
-        return YPosition;
-    }
+  /**
+   * jump method for Entity, adds upward velocity to the entity.
+   *
+   */
 
-    public void setXPosition(float XPosition) {
-        this.XPosition = XPosition;
-    }
-
-    public void setYPosition(float YPosition) {
-        this.YPosition = YPosition;
-    }
-
-    public float getYVelocity() {
-        return YVelocity;
-    }
-
-    public void setYVelocity(float YVelocity) {
-        this.YVelocity = YVelocity;
-    }
-
-    public void addYVelocity(float add) {
-        this.YVelocity += add;
-    }
-
-    public void drawToCanvas(GameView g, Canvas c) {
-        return;
-    }
-
-    /**
-     * updatePosition Method for entity
-     *
-     * @param fps The current fps is passed in to ensure nothing wonky happens at extremely low or high fps.
-     */
-
-    void updatePosition(long fps)
+  void jump()
+  {
+    if(YVelocity == 0)
     {
-        if(isMoving && isFacingRight){
-            setXPosition(getXPosition() + (movementSpeed / fps));
-        }
-        else if(isMoving && !isFacingRight) {
-            setXPosition(getXPosition() - (movementSpeed / fps));
-        }
-        if(getYVelocity() != 0)
-        {
-            setYPosition(getYPosition() + getYVelocity());
-        }
-        if(YPosition > 5000)
-            alive = false;
-
+      Log.i("ENTITY", "Attempting to jump");
+      addYVelocity(-jumpHeight);
     }
 
-    /**
-     * jump method for Entity, adds upward velocity to the entity.
-     *
-     */
+  }
 
-    void jump()
-    {
-        if(YVelocity == 0)
-        {
-            Log.i("ENTITY", "Attempting to jump");
-            addYVelocity(-jumpHeight);
-        }
+  /**
+   * collideEntity method for Entity. We expect this to be overridden for extra logic specific to entities.
+   *
+   * @param hitTarget a reference to the entity that this entity collided with.
+   */
 
-    }
+  public void collideEntity(Entity hitTarget)
+  {
+    return;
+  }
 
-    /**
-     * collideEntity method for Entity. We expect this to be overriden for extra logic specific to entities.
-     *
-     * @param hitTarget a reference to the entity that this entity collided with.
-     */
+  /**
+   * collideMap method for Entity. This doesn't need a parameter because when we touch ground, the logic will always be the same
+   *
+   */
 
-    public void collideEntity(Entity hitTarget)
-    {
-        return;
-    }
+  public void collideMap()
+  {
+    if(YVelocity > 0)
+      setYVelocity(0);
 
-    /**
-     * collideMap method for Entity. This doesnt need a parameter because when we touch ground, the logic will always be the same
-     *
-     */
+    grounded = true;
+  }
 
-    public void collideMap()
-    {
-        if(YVelocity > 0)
-            setYVelocity(0);
-
-        grounded = true;
-    }
-
-    public void kill()
-    {
-        alive = false;
-    }
+  public void kill()
+  {
+    alive = false;
+  }
 
 
 

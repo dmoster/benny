@@ -10,6 +10,8 @@ import com.dmoster.benny.BitmapFunctions;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dmoster.benny.MainActivity.gameView;
+
 public class PlayerCharacter extends Entity {
 
     BitmapFunctions bitFunc = new BitmapFunctions();
@@ -102,17 +104,42 @@ public class PlayerCharacter extends Entity {
     @Override
     public void collideEntity(Entity hitTarget) {
         Log.i("PLAYER CHARACTER", "Hit an entity");
-        if(hitTarget.name == "Purple Lolly")
-        {
-            HeadsUpDisplay.getInstance().addLollies(1);
-        } else if(hitTarget.name == "Pink Lolly")
-        {
-            HeadsUpDisplay.getInstance().addLollies(1);
-        } else if(hitTarget.name == "Red Lolly")
-        {
-            HeadsUpDisplay.getInstance().addLollies(1);
+        if (hitTarget.name == "Purple Lolly") {
+            gameView.hud.addLollies(1);
+            gameView.hud.subtractMoney(0.15);
+        }
+        else if (hitTarget.name == "Pink Lolly") {
+            gameView.hud.addLollies(2);
+            gameView.hud.subtractMoney(0.25);
+        }
+        else if (hitTarget.name == "Red Lolly") {
+            gameView.hud.addLollies(3);
+            gameView.hud.subtractMoney(0.35);
+        }
+        else if (hitTarget.name == "Green Lolly") {
+            gameView.hud.addLollies(4);
+            gameView.hud.subtractMoney(0.45);
+        }
+        else if (hitTarget.name == "Blue Lolly") {
+            gameView.hud.addLollies(5);
+            gameView.hud.subtractMoney(0.55);
+        }
+        else if (hitTarget.name == "Orange Lolly") {
+            gameView.hud.addLollies(6);
+            gameView.hud.subtractMoney(0.65);
         }
     }
 
+
+    public void kill() {
+        gameView.hud.subtractLives(1);
+        gameView.player.setXPosition(0);
+        gameView.player.setYPosition(0);
+
+        if (gameView.hud.getLives() == 0) {
+            gameView.map.setCurrentMap(0);
+            gameView.hud = new HeadsUpDisplay(3, 0, 0, 12.47);
+        }
+    }
 
 }
