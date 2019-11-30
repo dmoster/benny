@@ -24,7 +24,7 @@ public class PlayerCharacter extends Entity {
     Map<String, Integer> frameCount = new HashMap<String,Integer>();
 
     public PlayerCharacter() {
-        super(100, 400, 300, "Default Player");
+        super(100, 0, 300, "Default Player");
         frameCount.put("Stand", 5);
         frameCount.put("Walk", 2);
         frameCount.put("Bulldoze", 2);
@@ -33,7 +33,7 @@ public class PlayerCharacter extends Entity {
 
     public PlayerCharacter(Context c)
     {
-        super(10, 400, 300, "Bob");
+        super(100, 300, 300, "Bob");
         isFacingRight = true;
         AddHashMapValues();
         Log.i("PLAYER CHARACTER", "HashMapValues Loaded");
@@ -100,7 +100,19 @@ public class PlayerCharacter extends Entity {
     }
 
     @Override
-    public void collide(Entity hitTarget) {
-
+    public void collideEntity(Entity hitTarget) {
+        Log.i("PLAYER CHARACTER", "Hit an entity");
+        if(hitTarget.name == "Purple Lolly")
+        {
+            HeadsUpDisplay.getInstance().addLollies(1);
+        } else if(hitTarget.name == "Pink Lolly")
+        {
+            HeadsUpDisplay.getInstance().addLollies(1);
+        } else if(hitTarget.name == "Red Lolly")
+        {
+            HeadsUpDisplay.getInstance().addLollies(1);
+        }
     }
+
+
 }

@@ -17,9 +17,14 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.Log;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class TileMap {
+  public Set<RectF> collisionData = new HashSet<>();
+
   private static final String TAG = "TILEMAP";
-  public static final int TILE_SIZE = 128;
+  private static final int TILE_SIZE = 128;
 
   private int[][][] tileMapData;
   private int [][] currentMap;
@@ -63,6 +68,7 @@ public class TileMap {
     for (int[] row: currentMap) {
       tileLocX = 64;
       for (int tileKey: row) {
+
         tiles[tileKey].draw(tileLocX, tileLocY, canvas);
 
         tileLocX += 128;
@@ -110,18 +116,21 @@ public class TileMap {
       paint.setColor(Color.rgb(red, green, blue));
 
       if (solid) {
-
+        collisionData.add(new RectF(x - (TILE_SIZE / 2),
+                        y - (TILE_SIZE / 2),
+                        x + (TILE_SIZE / 2),
+                        y + (TILE_SIZE / 2)));
         canvas.drawRect(new RectF(x - (TILE_SIZE / 2),
-            y + (TILE_SIZE / 2),
-            x + (TILE_SIZE / 2),
-            y - (TILE_SIZE / 2)),
+                        y - (TILE_SIZE / 2),
+                        x + (TILE_SIZE / 2),
+                        y + (TILE_SIZE / 2)),
             paint);
       }
       else {
         canvas.drawRect(x - (TILE_SIZE / 2),
-            y + (TILE_SIZE / 2),
-            x + (TILE_SIZE / 2),
             y - (TILE_SIZE / 2),
+            x + (TILE_SIZE / 2),
+            y + (TILE_SIZE / 2),
             paint);
       }
     }
