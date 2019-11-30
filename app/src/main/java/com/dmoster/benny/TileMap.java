@@ -17,16 +17,16 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TileMap {
+  public Set<RectF> collisionData = new HashSet<>();
+
   private static final String TAG = "TILEMAP";
-  public static final int TILE_SIZE = 128;
+  private static final int TILE_SIZE = 128;
 
-  public ArrayList<RectF> collisionData = new ArrayList<RectF>();
-
-  private int[][]tileMapData;
+  public int[][]tileMapData;
 
   private final Tile[] tiles = {
       new Tile(51, 51, 51, false),
@@ -111,16 +111,16 @@ public class TileMap {
     public void draw(int x, int y, Canvas canvas) {
       Paint paint = new Paint();
       paint.setColor(Color.rgb(red, green, blue));
-      //The way this works is so incredibly sloppy.
-      collisionData.clear();
 
       if (solid) {
-        RectF t = new RectF(x - (TILE_SIZE / 2),
-                y + (TILE_SIZE / 2),
-                x + (TILE_SIZE / 2),
-                y - (TILE_SIZE / 2));
-        collisionData.add(t);
-        canvas.drawRect(t,
+        collisionData.add(new RectF(x - (TILE_SIZE / 2),
+                        y + (TILE_SIZE / 2),
+                        x + (TILE_SIZE / 2),
+                        y - (TILE_SIZE / 2)));
+        canvas.drawRect(new RectF(x - (TILE_SIZE / 2),
+                        y + (TILE_SIZE / 2),
+                        x + (TILE_SIZE / 2),
+                        y - (TILE_SIZE / 2)),
             paint);
       }
       else {

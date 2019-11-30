@@ -180,11 +180,11 @@ class GameView extends SurfaceView implements Runnable {
       // Capture the current time in milliseconds in startFrameTime
       long startFrameTime = System.currentTimeMillis();
 
-      // Update the frame
-      update();
-
       // Draw the frame
       draw();
+
+      // Update the frame
+      update();
 
       // Calculate the fps this frame
       // We can then use the result to
@@ -206,19 +206,23 @@ class GameView extends SurfaceView implements Runnable {
     applyPhysics();
     //We should change this to update all entities later.
     player.updatePosition(fps);
+    handleDead();
+  }
+
+  private void handleDead() {
+    //Write this later!
   }
 
   private void handleCollisions() {
     //Check the tilemap collisions
-    for(int i = 0; i < entities.size(); i++)
+    Log.i("GAMEVIEW", "Entity 0: " + entities.get(0).whereToDraw);
+    for(Entity e: entities)
     {
-      for(int a = 0; a < map.collisionData.size(); a++)
+      for(RectF a: map.collisionData)
       {
-        //Very helpful function! If this is true, we got a hit!
-        if(entities.get(i).whereToDraw.intersect(map.collisionData.get(a)))
+        if(RectF.intersects(e.whereToDraw, a))
         {
-          //have the entity deal with collision with the map;
-          entities.get(i).collideMap();
+          e.collideMap();
         }
       }
     }

@@ -27,6 +27,7 @@ public abstract class Entity {
     public boolean isMoving;
     public boolean isFacingRight;
     public boolean grounded = true;
+    public boolean alive;
 
     private float XPosition;
     private float YPosition;
@@ -55,9 +56,11 @@ public abstract class Entity {
         this.name = name;
         setXPosition(xPos);
         setYPosition(yPos);
+        setYVelocity(0);
         whereToDraw = new RectF(getXPosition(), getYPosition(), getXPosition() + bitmapFrameWidth, bitmapFrameHeight + getYPosition());
         frameToDraw = new Rect(0,0,bitmapFrameWidth, bitmapFrameHeight);
         this.movementSpeed = movementSpeed;
+        alive = true;
     }
 
     public float getXPosition() {
@@ -111,6 +114,9 @@ public abstract class Entity {
             setYPosition(getYPosition() + getYVelocity());
         }
 
+        if(YPosition > 3000)
+            alive = false;
+
     }
 
     /**
@@ -146,6 +152,7 @@ public abstract class Entity {
 
     public void collideMap()
     {
+        Log.i("Entity", "Collided with map");
         grounded = true;
     }
 
