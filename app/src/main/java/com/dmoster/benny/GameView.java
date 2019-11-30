@@ -86,7 +86,7 @@ class GameView extends SurfaceView implements Runnable {
   protected int height;
   protected int width;
 
-  private float gravity = 0.25f;
+  private float gravity = 0.3f;
 
   ArrayList<Entity> entities = new ArrayList<Entity>();
 
@@ -202,16 +202,26 @@ class GameView extends SurfaceView implements Runnable {
   // In later projects we will have dozens (arrays) of objects.
   // We will also do other things like collision detection.
   public void update() {
-
-    //Update players movement
-    //Log.i("GameView", "Updating Player Position...");
-    applyPhysics();
-    player.updatePosition(fps);
     handleCollisions();
-
+    applyPhysics();
+    //We should change this to update all entities later.
+    player.updatePosition(fps);
   }
 
   private void handleCollisions() {
+    //Check the tilemap collisions
+    for(int i = 0; i < entities.size(); i++)
+    {
+      for(int a = 0; a < map.collisionData.size(); a++)
+      {
+        //Very helpful function! If this is true, we got a hit!
+        if(entities.get(i).whereToDraw.intersect(map.collisionData.get(a)))
+        {
+          //have the entity deal with collision with the map;
+          entities.get(i).collideMap();
+        }
+      }
+    }
     //Iterate through each entity, and see if they hit something else.
     for(int i = 0; i < entities.size() - 1; i++)
     {
@@ -221,8 +231,8 @@ class GameView extends SurfaceView implements Runnable {
         if(RectF.intersects(entities.get(i).whereToDraw, entities.get(a).whereToDraw))
         {
           //Lets have each entity deal with collisions on their own.
-          entities.get(i).collide(entities.get(a));
-          entities.get(a).collide(entities.get(i));
+          entities.get(i).collideEntity(entities.get(a));
+          entities.get(a).collideEntity(entities.get(i));
         }
       }
     }
@@ -233,8 +243,7 @@ class GameView extends SurfaceView implements Runnable {
     {
         e.addYVelocity(gravity);
 
-      //We set this to 400 cause its our current ground... we should be checking for the height we collide with the ground.
-      if(e.getYPosition() > 400) {
+      if(e.grounded) {
         e.setYPosition(400);
         e.setYVelocity(0);
       }
@@ -314,8 +323,7 @@ class GameView extends SurfaceView implements Runnable {
           ((MainActivity) getContext()).showMenu();
         } else if (touchXPosition > width - 300 && touchXPosition < width &&
                 touchYPosition > 700 && touchYPosition < 1000){
-          Log.i("GAMEVIEW", "Jump button pressed");
-          player.jump(lastFrameChangeTime);
+          player.jump();
         } else {
         // Make Player move in direction touched
         player.isMoving = true;

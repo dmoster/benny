@@ -17,9 +17,14 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TileMap {
   private static final String TAG = "TILEMAP";
   public static final int TILE_SIZE = 128;
+
+  public ArrayList<RectF> collisionData = new ArrayList<RectF>();
 
   private int[][]tileMapData;
 
@@ -60,6 +65,7 @@ public class TileMap {
     for (int[] row: tileMapData) {
       tileLocX = 64;
       for (int tileKey: row) {
+
         tiles[tileKey].draw(tileLocX, tileLocY, canvas);
 
         tileLocX += 128;
@@ -105,13 +111,16 @@ public class TileMap {
     public void draw(int x, int y, Canvas canvas) {
       Paint paint = new Paint();
       paint.setColor(Color.rgb(red, green, blue));
+      //The way this works is so incredibly sloppy.
+      collisionData.clear();
 
       if (solid) {
-
-        canvas.drawRect(new RectF(x - (TILE_SIZE / 2),
-            y + (TILE_SIZE / 2),
-            x + (TILE_SIZE / 2),
-            y - (TILE_SIZE / 2)),
+        RectF t = new RectF(x - (TILE_SIZE / 2),
+                y + (TILE_SIZE / 2),
+                x + (TILE_SIZE / 2),
+                y - (TILE_SIZE / 2));
+        collisionData.add(t);
+        canvas.drawRect(t,
             paint);
       }
       else {

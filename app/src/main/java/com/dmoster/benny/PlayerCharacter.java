@@ -100,7 +100,14 @@ public class PlayerCharacter extends Entity {
     }
 
     @Override
-    public void collide(Entity hitTarget) {
-
+    public void collideEntity(Entity hitTarget) {
+        Log.i("Entity", "Collided with " + hitTarget.name);
     }
+
+    @Override
+    public void collideMap() {
+        Log.i("Entity", "Collided with map");
+        grounded = true;
+    }
+
 }
