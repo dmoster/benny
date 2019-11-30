@@ -105,15 +105,12 @@ public class PlayerCharacter extends Entity {
         if(hitTarget.name == "Purple Lolly")
         {
             HeadsUpDisplay.getInstance().addLollies(1);
-            hitTarget.kill();
         } else if(hitTarget.name == "Pink Lolly")
         {
             HeadsUpDisplay.getInstance().addLollies(1);
-            hitTarget.kill();
         } else if(hitTarget.name == "Red Lolly")
         {
             HeadsUpDisplay.getInstance().addLollies(1);
-            hitTarget.kill();
         }
     }
 

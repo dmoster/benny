@@ -215,8 +215,6 @@ class GameView extends SurfaceView implements Runnable {
     {
       if(!e.alive)
       {
-        e = null;
-        entities.remove(e);
       }
     }
   }

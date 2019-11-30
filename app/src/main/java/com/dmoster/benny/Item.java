@@ -44,6 +44,6 @@ public class Item extends Entity {
 
   @Override
   public void collideEntity(Entity hitTarget) {
-
+      this.kill();
   }
 }
