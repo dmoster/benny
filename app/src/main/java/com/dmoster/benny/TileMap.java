@@ -114,20 +114,20 @@ public class TileMap {
 
       if (solid) {
         collisionData.add(new RectF(x - (TILE_SIZE / 2),
-                        y + (TILE_SIZE / 2),
+                        y - (TILE_SIZE / 2),
                         x + (TILE_SIZE / 2),
-                        y - (TILE_SIZE / 2)));
+                        y + (TILE_SIZE / 2)));
         canvas.drawRect(new RectF(x - (TILE_SIZE / 2),
-                        y + (TILE_SIZE / 2),
+                        y - (TILE_SIZE / 2),
                         x + (TILE_SIZE / 2),
-                        y - (TILE_SIZE / 2)),
+                        y + (TILE_SIZE / 2)),
             paint);
       }
       else {
         canvas.drawRect(x - (TILE_SIZE / 2),
-            y + (TILE_SIZE / 2),
-            x + (TILE_SIZE / 2),
             y - (TILE_SIZE / 2),
+            x + (TILE_SIZE / 2),
+            y + (TILE_SIZE / 2),
             paint);
       }
     }

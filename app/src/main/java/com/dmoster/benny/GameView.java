@@ -215,7 +215,7 @@ class GameView extends SurfaceView implements Runnable {
 
   private void handleCollisions() {
     //Check the tilemap collisions
-    Log.i("GAMEVIEW", "Entity 0: " + entities.get(0).whereToDraw);
+//    Log.i("GAMEVIEW", "Entity 0: " + entities.get(0).whereToDraw);
     for(Entity e: entities)
     {
       for(RectF a: map.collisionData)
@@ -248,7 +248,6 @@ class GameView extends SurfaceView implements Runnable {
         e.addYVelocity(gravity);
 
       if(e.grounded) {
-        e.setYPosition(400);
         e.setYVelocity(0);
       }
 

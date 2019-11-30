@@ -114,7 +114,7 @@ public abstract class Entity {
             setYPosition(getYPosition() + getYVelocity());
         }
 
-        if(YPosition > 3000)
+        if(YPosition > 5000)
             alive = false;
 
     }
