@@ -5,6 +5,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 public class HeadsUpDisplay {
+
+  private static HeadsUpDisplay singleton = null;
+
   private int lives;
   private int tshirts;
   private int lollies;
@@ -17,6 +20,14 @@ public class HeadsUpDisplay {
     this.money = money;
   }
 
+  public static HeadsUpDisplay getInstance()
+  {
+    if(singleton == null)
+      singleton = new HeadsUpDisplay(3, 0, 0, 12.47);
+
+    return singleton;
+  }
+
   public int getLives() { return lives; }
   public int getTshirts() { return tshirts; }
   public int getLollies() { return lollies; }
@@ -26,6 +37,11 @@ public class HeadsUpDisplay {
   public void setTshirts(int tshirts) { this.tshirts = tshirts; }
   public void setLollies(int lollies) { this.lollies = lollies; }
   public void setMoney(double money) { this.money = money; }
+
+  public void addLives(int lives) { this.lives += lives; }
+  public void addTshirts(int tshirts) { this.tshirts += tshirts; }
+  public void addLollies(int lollies) { this.lollies += lollies; }
+  public void addMoney(double money) { this.money += money; }
 
   public void draw(Paint paint, Canvas canvas, final int width) {
     // Choose the brush color for drawing

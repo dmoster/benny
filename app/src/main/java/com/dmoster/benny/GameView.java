@@ -121,7 +121,7 @@ class GameView extends SurfaceView implements Runnable {
     map = new TileMap(tileMapData[0]);
 
     // Initialize HUD
-    hud = new HeadsUpDisplay(3, 0, 0, 12.47);
+    hud = HeadsUpDisplay.getInstance();
 
     // Add entities to list
     entities.add(player);
@@ -202,8 +202,8 @@ class GameView extends SurfaceView implements Runnable {
   // In later projects we will have dozens (arrays) of objects.
   // We will also do other things like collision detection.
   public void update() {
-    handleCollisions();
     applyPhysics();
+    handleCollisions();
     //We should change this to update all entities later.
     player.updatePosition(fps);
     handleDead();
@@ -211,11 +211,18 @@ class GameView extends SurfaceView implements Runnable {
 
   private void handleDead() {
     //Write this later!
+    for (Entity e: entities)
+    {
+      if(!e.alive)
+      {
+        e = null;
+        entities.remove(e);
+      }
+    }
   }
 
   private void handleCollisions() {
     //Check the tilemap collisions
-//    Log.i("GAMEVIEW", "Entity 0: " + entities.get(0).whereToDraw);
     for(Entity e: entities)
     {
       for(RectF a: map.collisionData)
@@ -223,6 +230,10 @@ class GameView extends SurfaceView implements Runnable {
         if(RectF.intersects(e.whereToDraw, a))
         {
           e.collideMap();
+        }
+        else
+        {
+          e.grounded = false;
         }
       }
     }
@@ -245,12 +256,8 @@ class GameView extends SurfaceView implements Runnable {
   private void applyPhysics() {
     for(Entity e : entities)
     {
+      if(!e.grounded)
         e.addYVelocity(gravity);
-
-      if(e.grounded) {
-        e.setYVelocity(0);
-      }
-
     }
   }
 

@@ -33,7 +33,7 @@ public class PlayerCharacter extends Entity {
 
     public PlayerCharacter(Context c)
     {
-        super(100, 600, 300, "Bob");
+        super(100, 300, 300, "Bob");
         isFacingRight = true;
         AddHashMapValues();
         Log.i("PLAYER CHARACTER", "HashMapValues Loaded");
@@ -101,7 +101,20 @@ public class PlayerCharacter extends Entity {
 
     @Override
     public void collideEntity(Entity hitTarget) {
-        Log.i("Entity", "Collided with " + hitTarget.name);
+        Log.i("PLAYER CHARACTER", "Hit an entity");
+        if(hitTarget.name == "Purple Lolly")
+        {
+            HeadsUpDisplay.getInstance().addLollies(1);
+            hitTarget.kill();
+        } else if(hitTarget.name == "Pink Lolly")
+        {
+            HeadsUpDisplay.getInstance().addLollies(1);
+            hitTarget.kill();
+        } else if(hitTarget.name == "Red Lolly")
+        {
+            HeadsUpDisplay.getInstance().addLollies(1);
+            hitTarget.kill();
+        }
     }
 
 

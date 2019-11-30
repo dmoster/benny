@@ -113,7 +113,6 @@ public abstract class Entity {
         {
             setYPosition(getYPosition() + getYVelocity());
         }
-
         if(YPosition > 5000)
             alive = false;
 
@@ -126,9 +125,9 @@ public abstract class Entity {
 
     void jump()
     {
-        if(grounded)
+        if(YVelocity == 0)
         {
-            grounded = false;
+            Log.i("ENTITY", "Attempting to jump");
             addYVelocity(-jumpHeight);
         }
 
@@ -152,8 +151,15 @@ public abstract class Entity {
 
     public void collideMap()
     {
-        Log.i("Entity", "Collided with map");
+        if(YVelocity > 0)
+            setYVelocity(0);
+
         grounded = true;
+    }
+
+    public void kill()
+    {
+        alive = false;
     }
 
 
