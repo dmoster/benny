@@ -21,7 +21,9 @@ public class TileMap {
   private static final String TAG = "TILEMAP";
   public static final int TILE_SIZE = 128;
 
-  private int[][]tileMapData;
+  private int[][][] tileMapData;
+  private int [][] currentMap;
+  private int mapCounter = 0;
 
   private final Tile[] tiles = {
       new Tile(51, 51, 51, false),
@@ -42,8 +44,9 @@ public class TileMap {
    * Constructor that loads current map data into the map
    * @param tileMapData Array containing tile type keys for each index on the map
    */
-  public TileMap(int[][] tileMapData) {
+  public TileMap(int[][][] tileMapData) {
     this.tileMapData = tileMapData;
+    this.currentMap = tileMapData[mapCounter];
   }
 
   /**
@@ -57,7 +60,7 @@ public class TileMap {
     int tileLocX;
     int tileLocY = 64;
 
-    for (int[] row: tileMapData) {
+    for (int[] row: currentMap) {
       tileLocX = 64;
       for (int tileKey: row) {
         tiles[tileKey].draw(tileLocX, tileLocY, canvas);

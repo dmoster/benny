@@ -118,7 +118,7 @@ class GameView extends SurfaceView implements Runnable {
     width = displayMetrics.widthPixels;
 
     // Initialize map
-    map = new TileMap(tileMapData[0]);
+    map = new TileMap(tileMapData);
 
     // Initialize HUD
     hud = new HeadsUpDisplay(3, 0, 0, 12.47);
