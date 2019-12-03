@@ -242,7 +242,7 @@ class GameView extends SurfaceView implements Runnable {
         //Very helpful function! If this is true, we got a hit!
         if(RectF.intersects(entities.get(i).whereToDraw, entities.get(a).whereToDraw))
         {
-          //Lets have each entity deal with collisions on their own.
+          //Let's have each entity deal with collisions on their own.
           entities.get(i).collideEntity(entities.get(a));
           entities.get(a).collideEntity(entities.get(i));
         }

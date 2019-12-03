@@ -151,7 +151,7 @@ public class TileMap {
                         y - (TILE_SIZE / 2),
                         x + (TILE_SIZE / 2),
                         y + (TILE_SIZE / 2)),
-            paint);
+                        paint);
       }
       else {
         canvas.drawRect(x - (TILE_SIZE / 2),

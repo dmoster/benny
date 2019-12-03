@@ -14,32 +14,32 @@ public class Item extends Entity {
   private static final int frameCount = 2;
 
   public Item(Context context, int xPos, int yPos, int movementSpeed, int bitmapId, String name) {
-  super(xPos, yPos, movementSpeed, name);
-  isFacingRight = true;
-  isMoving = false;
+    super(xPos, yPos, movementSpeed, name);
+    isFacingRight = true;
+    isMoving = false;
 
-  itemBitmap = bitFunc.LoadBitmap(this, context, bitmapId, frameCount);
+    itemBitmap = bitFunc.LoadBitmap(this, context, bitmapId, frameCount);
 
-  Log.i(TAG, name + " loaded");
+    Log.i(TAG, name + " loaded");
   }
 
   @Override
   public void drawToCanvas(GameView gameView, Canvas canvas) {
-  whereToDraw.set((int) getXPosition(),
-          getYPosition(),
-        (int) getXPosition() + bitmapFrameWidth,
-      getYPosition() + bitmapFrameHeight);
+    whereToDraw.set((int) getXPosition(),
+            getYPosition(),
+          (int) getXPosition() + bitmapFrameWidth,
+        getYPosition() + bitmapFrameHeight);
 
-  if(!isMoving && isFacingRight)
-  {
-    currentAnimationFrameCount = frameCount;
+    if(!isMoving && isFacingRight)
+    {
+      currentAnimationFrameCount = frameCount;
 
-    gameView.getCurrentFrame(this);
+      gameView.getCurrentFrame(this);
 
-    canvas.drawBitmap(itemBitmap,
-      frameToDraw,
-      whereToDraw, gameView.paint);
-  }
+      canvas.drawBitmap(itemBitmap,
+        frameToDraw,
+        whereToDraw, gameView.paint);
+    }
   }
 
   @Override
