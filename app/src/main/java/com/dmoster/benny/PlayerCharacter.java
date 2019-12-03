@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.Log;
 
-import com.dmoster.benny.BitmapFunctions;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +33,7 @@ public class PlayerCharacter extends Entity {
 
     public PlayerCharacter(Context c)
     {
-        super(100, 300, 300, "Bob");
+        super(100, 300, 300, "Benny");
         isFacingRight = true;
         AddHashMapValues();
         Log.i("PLAYER CHARACTER", "HashMapValues Loaded");

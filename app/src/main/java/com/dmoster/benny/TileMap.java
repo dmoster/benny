@@ -15,9 +15,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 
 import java.util.HashSet;
 import java.util.Set;
