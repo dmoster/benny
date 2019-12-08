@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     decorView.setSystemUiVisibility(
         View.SYSTEM_UI_FLAG_IMMERSIVE
             // Set the content to appear under the system bars so that the
-            // content doesn't resize when the system bars hide and show.
+            // content doesn't resize when the system bars hide and show.git
             | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
