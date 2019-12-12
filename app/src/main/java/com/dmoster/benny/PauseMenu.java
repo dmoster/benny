@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+//The error comes from DialogFragment not being able to be cast as an activity when we try to pause!
 public class PauseMenu extends DialogFragment {
 
     @Override
@@ -24,7 +25,7 @@ public class PauseMenu extends DialogFragment {
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int idgit pu) {
+                    public void onClick(DialogInterface dialog, int id) {
 
                     }
                 });

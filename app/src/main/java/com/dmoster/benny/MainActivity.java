@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     // Create new Intent which calls PauseMenu
     Intent pause = new Intent(this, PauseMenu.class);
     startActivity(pause);
+
   }
 
   // This method executes when the player quits the game
