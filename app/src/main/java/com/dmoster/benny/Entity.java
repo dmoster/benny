@@ -11,6 +11,7 @@ package com.dmoster.benny;
  * @since 1.0
  */
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -123,7 +124,7 @@ public abstract class Entity {
    *
    */
 
-  void jump()
+  void jump(Context c)
   {
     if(YVelocity == 0)
     {
@@ -139,7 +140,7 @@ public abstract class Entity {
    * @param hitTarget a reference to the entity that this entity collided with.
    */
 
-  public void collideEntity(Entity hitTarget)
+  public void collideEntity(Entity hitTarget, Context context)
   {
     return;
   }

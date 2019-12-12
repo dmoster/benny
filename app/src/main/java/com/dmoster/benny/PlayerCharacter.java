@@ -3,16 +3,21 @@ package com.dmoster.benny;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.media.MediaPlayer;
 import android.util.Log;
+import android.view.View;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.dmoster.benny.MainActivity.gameView;
+import static java.security.AccessController.getContext;
 
 public class PlayerCharacter extends Entity {
 
     BitmapFunctions bitFunc = new BitmapFunctions();
+
+    MediaPlayer mediaPlayer;
 
     private Bitmap standBitmap;
     private Bitmap standBitmapMirrored;
@@ -100,32 +105,52 @@ public class PlayerCharacter extends Entity {
     }
 
     @Override
-    public void collideEntity(Entity hitTarget) {
+    public void collideEntity(Entity hitTarget, Context context) {
         Log.i("PLAYER CHARACTER", "Hit an entity");
         if (hitTarget.name == "Purple Lolly") {
             gameView.hud.addLollies(1);
             gameView.hud.subtractMoney(0.15);
+            playPickupSound(context);
         }
         else if (hitTarget.name == "Pink Lolly") {
             gameView.hud.addLollies(2);
             gameView.hud.subtractMoney(0.25);
+            playPickupSound(context);
         }
         else if (hitTarget.name == "Red Lolly") {
             gameView.hud.addLollies(3);
             gameView.hud.subtractMoney(0.35);
+            playPickupSound(context);
         }
         else if (hitTarget.name == "Green Lolly") {
             gameView.hud.addLollies(4);
             gameView.hud.subtractMoney(0.45);
+            playPickupSound(context);
         }
         else if (hitTarget.name == "Blue Lolly") {
             gameView.hud.addLollies(5);
             gameView.hud.subtractMoney(0.55);
+            playPickupSound(context);
         }
         else if (hitTarget.name == "Orange Lolly") {
             gameView.hud.addLollies(6);
             gameView.hud.subtractMoney(0.65);
+            playPickupSound(context);
+        } else if (hitTarget.name == "Old Lady")
+        {
+            alive = false;
+            playHitSound(context);
+        } else if (hitTarget.name == "Hipster")
+        {
+            alive = false;
+            playHitSound(context);
         }
+    }
+
+    @Override
+    void jump(Context c) {
+        super.jump(c);
+        playJumpSound(c);
     }
 
 
@@ -138,6 +163,48 @@ public class PlayerCharacter extends Entity {
             gameView.map.setCurrentMap(0);
             gameView.hud = new HeadsUpDisplay(3, 0, 0, 12.47);
         }
+    }
+
+    public void playPickupSound(Context c)
+    {
+        mediaPlayer = MediaPlayer.create(c, R.raw.pickup);
+
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.release();
+                mp = null;
+            }
+        });
+        mediaPlayer.start();
+    }
+
+    public void playHitSound(Context c)
+    {
+        mediaPlayer = MediaPlayer.create(c, R.raw.hit);
+
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.release();
+                mp = null;
+            }
+        });
+        mediaPlayer.start();
+    }
+
+    public void playJumpSound(Context c)
+    {
+        mediaPlayer = MediaPlayer.create(c, R.raw.jump);
+
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.release();
+                mp = null;
+            }
+        });
+        mediaPlayer.start();
     }
 
 }

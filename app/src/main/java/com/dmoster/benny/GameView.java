@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.media.MediaPlayer;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -244,8 +245,8 @@ class GameView extends SurfaceView implements Runnable {
         if(RectF.intersects(entities.get(i).whereToDraw, entities.get(a).whereToDraw))
         {
           //Let's have each entity deal with collisions on their own.
-          entities.get(i).collideEntity(entities.get(a));
-          entities.get(a).collideEntity(entities.get(i));
+          entities.get(i).collideEntity(entities.get(a), this.getContext());
+          entities.get(a).collideEntity(entities.get(i), this.getContext());
         }
       }
     }
@@ -331,7 +332,7 @@ class GameView extends SurfaceView implements Runnable {
           ((MainActivity) getContext()).showMenu();
         } else if (touchXPosition > width - 300 && touchXPosition < width &&
                 touchYPosition > 700 && touchYPosition < 1000){
-          player.jump();
+          player.jump(this.getContext());
         } else {
         // Make Player move in direction touched
         player.isMoving = true;

@@ -43,7 +43,7 @@ public class Item extends Entity {
   }
 
   @Override
-  public void collideEntity(Entity hitTarget) {
+  public void collideEntity(Entity hitTarget, Context context) {
 
     this.kill();
   }
