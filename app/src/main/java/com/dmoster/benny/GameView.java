@@ -39,6 +39,9 @@ class GameView extends SurfaceView implements Runnable {
   // We will see it in action in the draw method soon.
   SurfaceHolder ourHolder;
 
+  //This will play the background music
+  MediaPlayer backgroundPlayer;
+
   // A boolean which we will set and unset
   // when the game is running- or not.
   volatile boolean playing;
@@ -108,6 +111,10 @@ class GameView extends SurfaceView implements Runnable {
     // SurfaceView class to set up our object.
     // How kind.
     super(context);
+
+    backgroundPlayer = MediaPlayer.create(this.getContext(), R.raw.backgroundloop);
+    backgroundPlayer.setLooping(true);
+    backgroundPlayer.start();
 
     // Initialize ourHolder and paint objects
     ourHolder = getHolder();
